@@ -1,8 +1,11 @@
 <script>
-  export let open = false;
-  export let title = "Modal";
-  export let size = "md";
-  export let onClose = () => {};
+  import { X } from "lucide-svelte";
+  let {
+    open = false,
+    title = "Modal",
+    size = "md",
+    onClose = () => {},
+  } = $props();
 
   const sizeClasses = {
     sm: "max-w-sm",
@@ -21,24 +24,28 @@
       onclick={onClose}
     ></button>
     <div
-      class={`relative z-10 w-full ${sizeClasses[size] || sizeClasses.md} overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-xl`}
+      class={`relative z-10 flex w-full flex-col ${sizeClasses[size] || sizeClasses.md} max-h-[90vh] overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-xl`}
     >
-      <header class="flex items-center justify-between border-b border-slate-100 px-5 py-4">
-        <h2 class="text-sm font-semibold uppercase tracking-[0.2em] text-slate-500">
+      <header
+        class="flex flex-none items-center justify-between border-b border-slate-100 px-5 py-4"
+      >
+        <h2
+          class="text-sm font-semibold uppercase tracking-[0.2em] text-slate-500"
+        >
           {title}
         </h2>
         <button
           type="button"
-          class="rounded-full border border-slate-200 px-2 py-1 text-xs font-semibold uppercase tracking-wide text-slate-500 transition hover:border-slate-300"
+          class="rounded-full p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition"
           onclick={onClose}
         >
-          Close
+          <X size={18} />
         </button>
       </header>
-      <div class="px-5 py-4">
+      <div class="overflow-y-auto px-5 py-4">
         <slot />
       </div>
-      <footer class="border-t border-slate-100 px-5 py-4">
+      <footer class="flex-none border-t border-slate-100 px-5 py-4">
         <slot name="footer" />
       </footer>
     </div>

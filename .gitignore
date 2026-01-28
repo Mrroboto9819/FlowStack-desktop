@@ -22,3 +22,5 @@ coverage
 /src-tauri/gen
 /src-tauri/.tauri
 Thumbs.db
+.claude/
+.qodo/

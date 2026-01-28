@@ -5,7 +5,7 @@
   import ToastContainer from "../lib/ToastContainer.svelte";
   import Sidebar from "../lib/components/Sidebar.svelte";
   import UpdateScreen from "../lib/UpdateScreen.svelte";
-  import { hydrateAllStores } from "../lib/stores/index.js";
+  import { hydrateAllStores, clearAllStores } from "../lib/stores/index.js";
 
   let { children } = $props();
 
@@ -49,11 +49,20 @@
     // Setup Tauri updater
     setupUpdater();
 
-    // Add keyboard shortcut for testing update screen (Ctrl+Shift+U)
+    // Add keyboard shortcuts for dev testing
     const handleKeyDown = (e: KeyboardEvent) => {
+      // Ctrl+Shift+U - Test update screen
       if (e.ctrlKey && e.shiftKey && e.key === "U") {
         e.preventDefault();
         testUpdateScreen();
+      }
+      // Ctrl+Shift+R - Reset all data (dev only)
+      if (import.meta.env.DEV && e.ctrlKey && e.shiftKey && e.key === "R") {
+        e.preventDefault();
+        if (confirm("Reset all data? This cannot be undone.")) {
+          clearAllStores();
+          window.location.reload();
+        }
       }
     };
     window.addEventListener("keydown", handleKeyDown);

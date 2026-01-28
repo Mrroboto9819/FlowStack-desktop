@@ -6,6 +6,9 @@
   let settings = $derived(settingsStore.settings);
   let showResetModal = $state(false);
 
+  // Only show reset in development mode
+  const isDev = import.meta.env.DEV;
+
   function toggleTheme() {
     const newTheme = settings.theme === "dark" ? "light" : "dark";
     settingsStore.setTheme(newTheme);
@@ -64,25 +67,29 @@
       </div>
     </div>
 
-    <!-- Data Management -->
-    <div class="rounded-xl border border-destructive bg-card p-6">
-      <h2 class="text-lg font-semibold text-destructive mb-4">Danger Zone</h2>
-      <div class="flex items-center justify-between">
-        <div>
-          <p class="font-medium text-foreground">Reset All Data</p>
-          <p class="text-sm text-muted-foreground">
-            Clear all tasks, sprints, users, and settings
-          </p>
+    <!-- Data Management (Development Only) -->
+    {#if isDev}
+      <div class="rounded-xl border border-destructive bg-card p-6">
+        <h2 class="text-lg font-semibold text-destructive mb-4">
+          Danger Zone <span class="text-xs font-mono text-muted-foreground">(Dev Only)</span>
+        </h2>
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="font-medium text-foreground">Reset All Data</p>
+            <p class="text-sm text-muted-foreground">
+              Clear all tasks, sprints, users, and settings
+            </p>
+          </div>
+          <button
+            type="button"
+            class="btn btn-destructive"
+            onclick={() => (showResetModal = true)}
+          >
+            Reset App
+          </button>
         </div>
-        <button
-          type="button"
-          class="btn btn-destructive"
-          onclick={() => (showResetModal = true)}
-        >
-          Reset App
-        </button>
       </div>
-    </div>
+    {/if}
   </div>
 
   <!-- Reset Confirmation Modal -->

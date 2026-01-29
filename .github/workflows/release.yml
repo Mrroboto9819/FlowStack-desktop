@@ -42,6 +42,10 @@ jobs:
             librsvg2-dev \
             patchelf
 
+      - name: Install Rust target for Intel Mac
+        if: matrix.args == '--target x86_64-apple-darwin'
+        run: rustup target add x86_64-apple-darwin
+
       - name: Build and publish (Windows/Linux/macOS)
         uses: tauri-apps/tauri-action@v0.6.0
         env:

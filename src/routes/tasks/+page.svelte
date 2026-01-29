@@ -16,11 +16,15 @@
     AlertCircle,
     AlertTriangle,
     Eye,
+    ListTodo,
   } from "lucide-svelte";
   import { taskStore, userStore, statusStore, settingsStore } from "../../lib/stores/index.js";
   import TaskModal from "../../lib/components/TaskModal.svelte";
   import TaskDetailModal from "../../lib/components/TaskDetailModal.svelte";
   import ConfirmModal from "../../lib/components/ConfirmModal.svelte";
+  import TaskTimer from "../../lib/components/TaskTimer.svelte";
+  import Select from "../../lib/Select.svelte";
+  import DatePicker from "../../lib/components/DatePicker.svelte";
   import { dndzone } from "svelte-dnd-action";
   import { flip } from "svelte/animate";
   import { marked } from "marked";
@@ -30,6 +34,12 @@
   let users = $derived(userStore.users);
   let visibleStatuses = $derived(statusStore.visible);
   let settings = $derived(settingsStore.settings);
+
+  // Status filter options for Select component
+  let statusFilterOptions = $derived([
+    { value: "all", label: "All" },
+    ...visibleStatuses.map((s) => ({ value: s.status, label: s.status })),
+  ]);
 
   const flipDurationMs = 200;
 
@@ -267,15 +277,13 @@
       <div class="grid gap-3 md:grid-cols-4 mb-6">
         <label class="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
           Status
-          <select
-            class="mt-2 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
-            bind:value={filterStatus}
-          >
-            <option value="all">All</option>
-            {#each visibleStatuses as statusItem}
-              <option value={statusItem.status}>{statusItem.status}</option>
-            {/each}
-          </select>
+          <div class="mt-2">
+            <Select
+              bind:value={filterStatus}
+              options={statusFilterOptions}
+              placeholder="Select status"
+            />
+          </div>
         </label>
         <label class="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
           Tag
@@ -287,19 +295,21 @@
         </label>
         <label class="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
           From
-          <input
-            type="date"
-            class="mt-2 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
-            bind:value={filterFrom}
-          />
+          <div class="mt-2">
+            <DatePicker
+              bind:value={filterFrom}
+              placeholder="Start date"
+            />
+          </div>
         </label>
         <label class="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
           To
-          <input
-            type="date"
-            class="mt-2 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
-            bind:value={filterTo}
-          />
+          <div class="mt-2">
+            <DatePicker
+              bind:value={filterTo}
+              placeholder="End date"
+            />
+          </div>
         </label>
       </div>
 
@@ -461,6 +471,39 @@
                         {/if}
                       </div>
                     {/if}
+
+                    <!-- Subtasks Progress -->
+                    {#if task.subtasks && Array.isArray(task.subtasks) && task.subtasks.length > 0}
+                      {@const completedSubtasks = task.subtasks.filter(st => st.completed).length}
+                      {@const totalSubtasks = task.subtasks.length}
+                      <div class="mb-3">
+                        <div class="flex items-center gap-2 mb-1">
+                          <ListTodo size={10} class="text-muted-foreground" />
+                          <span class="text-[10px] font-medium text-muted-foreground">
+                            {completedSubtasks}/{totalSubtasks} subtasks
+                          </span>
+                        </div>
+                        <div class="h-1 bg-muted rounded-full overflow-hidden">
+                          <div
+                            class="h-full bg-primary transition-all duration-300"
+                            style={`width: ${totalSubtasks > 0 ? (completedSubtasks / totalSubtasks) * 100 : 0}%`}
+                          ></div>
+                        </div>
+                      </div>
+                    {/if}
+
+                    <!-- Timer -->
+                    <div class="mb-3">
+                      <TaskTimer
+                        taskId={task.id}
+                        elapsedSeconds={task.elapsedSeconds || 0}
+                        isRunning={task.timerRunning || false}
+                        onStart={(id) => taskStore.startTimer(id)}
+                        onPause={(id, elapsed) => taskStore.pauseTimer(id, elapsed)}
+                        onReset={(id) => taskStore.resetTimer(id)}
+                        compact={true}
+                      />
+                    </div>
 
                     <!-- Divider -->
                     <div class="my-3 border-t border-border"></div>

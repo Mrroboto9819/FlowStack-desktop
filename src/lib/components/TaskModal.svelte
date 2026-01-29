@@ -1,8 +1,10 @@
 <script>
-  import { Plus, Heading, FileText, Type, Hash, AlertCircle, Target, Tag, User, Activity, Layers3, Clock, CheckCircle2, Eye } from "lucide-svelte";
+  import { Plus, Heading, FileText, Type, Hash, AlertCircle, Target, Tag, User, Activity, Layers3, Clock, CheckCircle2, Eye, ListTodo } from "lucide-svelte";
   import Modal from "../Modal.svelte";
   import Switch from "../Switch.svelte";
+  import Select from "../Select.svelte";
   import TagInput from "./TagInput.svelte";
+  import SubtaskInput from "./SubtaskInput.svelte";
   import { taskStore, userStore, statusStore, sprintStore } from "../stores/index.js";
   import { marked } from "marked";
 
@@ -28,6 +30,7 @@
     blocked: false,
     blocker: "",
     acceptance: "",
+    subtasks: [],
   });
 
   let showPreview = $state("write"); // "write", "split", or "preview"
@@ -57,6 +60,7 @@
           blocked: Boolean(task.blocked),
           blocker: task.blocker || "",
           acceptance: task.acceptance || "",
+          subtasks: Array.isArray(task.subtasks) ? task.subtasks : [],
         };
       } else {
         // Get active sprint for new tasks
@@ -77,6 +81,7 @@
           blocked: false,
           blocker: "",
           acceptance: "",
+          subtasks: [],
         };
       }
       showPreview = "write"; // Reset preview mode
@@ -109,6 +114,7 @@
       blocked: Boolean(formData.blocked),
       blocker: formData.blocker.trim(),
       acceptance: formData.acceptance.trim(),
+      subtasks: Array.isArray(formData.subtasks) ? formData.subtasks : [],
     };
 
     if (mode === "edit" && formData.id) {
@@ -147,6 +153,34 @@
   let assignedUsers = $derived(
     users.map((user) => `${user.name} ${user.lastname}`.trim()).filter(Boolean)
   );
+
+  // Select component options
+  const typeOptions = [
+    { value: "story", label: "Story" },
+    { value: "bug", label: "Bug" },
+    { value: "chore", label: "Chore" },
+  ];
+
+  const priorityOptions = [
+    { value: "low", label: "Low" },
+    { value: "medium", label: "Medium" },
+    { value: "high", label: "High" },
+    { value: "critical", label: "Critical" },
+  ];
+
+  let assignOptions = $derived([
+    { value: "", label: "Unassigned" },
+    ...assignedUsers.map((user) => ({ value: user, label: user })),
+  ]);
+
+  let statusOptions = $derived(
+    statuses.map((s) => ({ value: s.status, label: s.status }))
+  );
+
+  let sprintOptions = $derived([
+    { value: "", label: "Backlog" },
+    ...sprints.map((sprint) => ({ value: sprint.id, label: sprint.name })),
+  ]);
 </script>
 
 {#snippet modalChildren()}
@@ -255,14 +289,13 @@
           <Type size={14} class="text-muted-foreground" />
           Type
         </div>
-        <select
-          class="mt-2 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
-          bind:value={formData.type}
-        >
-          <option value="story">Story</option>
-          <option value="bug">Bug</option>
-          <option value="chore">Chore</option>
-        </select>
+        <div class="mt-2">
+          <Select
+            bind:value={formData.type}
+            options={typeOptions}
+            placeholder="Select type"
+          />
+        </div>
       </label>
       <label class="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
         <div class="flex items-center gap-2 mb-1">
@@ -280,15 +313,13 @@
           <AlertCircle size={14} class="text-muted-foreground" />
           Priority
         </div>
-        <select
-          class="mt-2 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
-          bind:value={formData.priority}
-        >
-          <option value="low">Low</option>
-          <option value="medium">Medium</option>
-          <option value="high">High</option>
-          <option value="critical">Critical</option>
-        </select>
+        <div class="mt-2">
+          <Select
+            bind:value={formData.priority}
+            options={priorityOptions}
+            placeholder="Select priority"
+          />
+        </div>
       </label>
     </div>
 
@@ -319,15 +350,13 @@
         <User size={14} class="text-muted-foreground" />
         Assign
       </div>
-      <select
-        class="mt-2 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
-        bind:value={formData.asign}
-      >
-        <option value="">Unassigned</option>
-        {#each assignedUsers as person}
-          <option value={person}>{person}</option>
-        {/each}
-      </select>
+      <div class="mt-2">
+        <Select
+          bind:value={formData.asign}
+          options={assignOptions}
+          placeholder="Unassigned"
+        />
+      </div>
     </label>
 
     <label class="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
@@ -335,14 +364,13 @@
         <Activity size={14} class="text-muted-foreground" />
         Status
       </div>
-      <select
-        class="mt-2 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
-        bind:value={formData.status}
-      >
-        {#each statuses as statusItem}
-          <option value={statusItem.status}>{statusItem.status}</option>
-        {/each}
-      </select>
+      <div class="mt-2">
+        <Select
+          bind:value={formData.status}
+          options={statusOptions}
+          placeholder="Select status"
+        />
+      </div>
     </label>
 
     <label class="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
@@ -350,15 +378,13 @@
         <Layers3 size={14} class="text-muted-foreground" />
         Sprint
       </div>
-      <select
-        class="mt-2 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
-        bind:value={formData.sprintId}
-      >
-        <option value="">Backlog</option>
-        {#each sprints as sprint}
-          <option value={sprint.id}>{sprint.name}</option>
-        {/each}
-      </select>
+      <div class="mt-2">
+        <Select
+          bind:value={formData.sprintId}
+          options={sprintOptions}
+          placeholder="Backlog"
+        />
+      </div>
     </label>
 
     <label class="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
@@ -384,6 +410,16 @@
         bind:value={formData.acceptance}
         onkeydown={handleTextareaKeydown}
       ></textarea>
+    </label>
+
+    <label class="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+      <div class="flex items-center gap-2 mb-1">
+        <ListTodo size={14} class="text-muted-foreground" />
+        Subtasks
+      </div>
+      <div class="mt-2">
+        <SubtaskInput bind:value={formData.subtasks} />
+      </div>
     </label>
 
     <Switch bind:checked={formData.blocked} label="Status: Blocked" />

@@ -118,6 +118,82 @@ export const taskStore = {
     return tasks.filter((task) => task.status === "BACKLOG" || !task.sprintId);
   },
 
+  toggleSubtask(taskId, subtaskId) {
+    const task = tasks.find((t) => t.id === taskId);
+    if (!task || !Array.isArray(task.subtasks)) return;
+
+    const updatedSubtasks = task.subtasks.map((st) =>
+      st.id === subtaskId ? { ...st, completed: !st.completed } : st
+    );
+
+    this.update(taskId, { subtasks: updatedSubtasks });
+  },
+
+  startTimer(taskId) {
+    // Stop all other running timers
+    tasks = tasks.map((task) => {
+      if (task.timerRunning && task.id !== taskId) {
+        const elapsed = task.elapsedSeconds || 0;
+        const startedAt = task.timerStartedAt ? new Date(task.timerStartedAt).getTime() : Date.now();
+        const additionalTime = Math.floor((Date.now() - startedAt) / 1000);
+        return {
+          ...task,
+          timerRunning: false,
+          elapsedSeconds: elapsed + additionalTime,
+          timerStartedAt: null,
+        };
+      }
+      return task;
+    });
+
+    // Start the timer for this task
+    tasks = tasks.map((task) =>
+      task.id === taskId
+        ? {
+            ...task,
+            timerRunning: true,
+            timerStartedAt: new Date().toISOString(),
+            elapsedSeconds: task.elapsedSeconds || 0,
+          }
+        : task
+    );
+    saveTasks();
+    toastStore.info("Timer started");
+  },
+
+  pauseTimer(taskId, currentElapsed) {
+    const task = tasks.find((t) => t.id === taskId);
+    if (!task) return;
+
+    tasks = tasks.map((t) =>
+      t.id === taskId
+        ? {
+            ...t,
+            timerRunning: false,
+            elapsedSeconds: currentElapsed,
+            timerStartedAt: null,
+          }
+        : t
+    );
+    saveTasks();
+    toastStore.info("Timer paused");
+  },
+
+  resetTimer(taskId) {
+    tasks = tasks.map((task) =>
+      task.id === taskId
+        ? {
+            ...task,
+            timerRunning: false,
+            elapsedSeconds: 0,
+            timerStartedAt: null,
+          }
+        : task
+    );
+    saveTasks();
+    toastStore.info("Timer reset");
+  },
+
   clear() {
     tasks = [];
     saveTasks();

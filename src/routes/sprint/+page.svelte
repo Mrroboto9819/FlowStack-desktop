@@ -8,6 +8,7 @@
     ChevronRight,
     GripVertical,
     Move,
+    ListTodo,
   } from "lucide-svelte";
   import {
     taskStore,
@@ -18,6 +19,7 @@
   import EmptyState from "../../lib/EmptyState.svelte";
   import SprintModal from "../../lib/components/SprintModal.svelte";
   import ConfirmModal from "../../lib/components/ConfirmModal.svelte";
+  import TaskTimer from "../../lib/components/TaskTimer.svelte";
   import { dndzone } from "svelte-dnd-action";
   import { flip } from "svelte/animate";
   import { marked } from "marked";
@@ -494,6 +496,24 @@
                                   {task.description}
                                 </p>
                               {/if}
+                              {#if task.subtasks && Array.isArray(task.subtasks) && task.subtasks.length > 0}
+                                {@const completedSubtasks = task.subtasks.filter(st => st.completed).length}
+                                {@const totalSubtasks = task.subtasks.length}
+                                <div class="mt-2">
+                                  <div class="flex items-center gap-2 mb-1">
+                                    <ListTodo size={10} class="text-muted-foreground" />
+                                    <span class="text-[10px] font-medium text-muted-foreground">
+                                      {completedSubtasks}/{totalSubtasks}
+                                    </span>
+                                  </div>
+                                  <div class="h-1 bg-muted rounded-full overflow-hidden">
+                                    <div
+                                      class="h-full bg-primary transition-all duration-300"
+                                      style={`width: ${totalSubtasks > 0 ? (completedSubtasks / totalSubtasks) * 100 : 0}%`}
+                                    ></div>
+                                  </div>
+                                </div>
+                              {/if}
                             </div>
                           </div>
                           <div
@@ -542,11 +562,17 @@
                               Blocked
                             </span>
                           {/if}
-                          <span
-                            class="flex-none ml-auto text-[10px] uppercase tracking-wide text-muted-foreground"
-                          >
-                            ID {task.id.slice(0, 8)}
-                          </span>
+                          <div class="flex-none ml-auto">
+                            <TaskTimer
+                              taskId={task.id}
+                              elapsedSeconds={task.elapsedSeconds || 0}
+                              isRunning={task.timerRunning || false}
+                              onStart={(id) => taskStore.startTimer(id)}
+                              onPause={(id, elapsed) => taskStore.pauseTimer(id, elapsed)}
+                              onReset={(id) => taskStore.resetTimer(id)}
+                              compact={true}
+                            />
+                          </div>
                         </div>
                       </div>
                     </article>

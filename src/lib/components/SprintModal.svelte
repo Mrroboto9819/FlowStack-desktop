@@ -1,6 +1,8 @@
 <script>
   import { Plus, Heading, Target, Calendar, Activity, Eye, FileText } from "lucide-svelte";
   import Modal from "../Modal.svelte";
+  import Select from "../Select.svelte";
+  import DatePicker from "./DatePicker.svelte";
   import { sprintStore } from "../stores/index.js";
   import { marked } from "marked";
 
@@ -20,6 +22,13 @@
   });
 
   let showPreview = $state("write");
+
+  // Select component options
+  const statusOptions = [
+    { value: "planned", label: "Planned" },
+    { value: "active", label: "Active" },
+    { value: "closed", label: "Closed" },
+  ];
 
   // Initialize form when modal opens or sprint changes
   $effect(() => {
@@ -177,11 +186,12 @@
           <Calendar size={14} class="text-muted-foreground" />
           Start date
         </div>
-        <input
-          type="date"
-          class="mt-2 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
-          bind:value={formData.start}
-        />
+        <div class="mt-2">
+          <DatePicker
+            bind:value={formData.start}
+            placeholder="Select start date"
+          />
+        </div>
       </label>
 
       <label class="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
@@ -189,11 +199,12 @@
           <Calendar size={14} class="text-muted-foreground" />
           End date
         </div>
-        <input
-          type="date"
-          class="mt-2 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
-          bind:value={formData.end}
-        />
+        <div class="mt-2">
+          <DatePicker
+            bind:value={formData.end}
+            placeholder="Select end date"
+          />
+        </div>
       </label>
     </div>
 
@@ -202,14 +213,13 @@
         <Activity size={14} class="text-muted-foreground" />
         Status
       </div>
-      <select
-        class="mt-2 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
-        bind:value={formData.status}
-      >
-        <option value="planned">Planned</option>
-        <option value="active">Active</option>
-        <option value="closed">Closed</option>
-      </select>
+      <div class="mt-2">
+        <Select
+          bind:value={formData.status}
+          options={statusOptions}
+          placeholder="Select status"
+        />
+      </div>
     </label>
   </form>
 {/snippet}

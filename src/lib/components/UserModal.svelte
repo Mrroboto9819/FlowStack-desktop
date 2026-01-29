@@ -1,6 +1,7 @@
 <script>
   import { Plus, Heading, User, Mail, Briefcase } from "lucide-svelte";
   import Modal from "../Modal.svelte";
+  import Select from "../Select.svelte";
   import { userStore } from "../stores/index.js";
 
   let {
@@ -16,6 +17,18 @@
     email: "",
     rol: "",
   });
+
+  // Select component options
+  const roleOptions = [
+    { value: "", label: "Select a role" },
+    { value: "Developer", label: "Developer" },
+    { value: "Designer", label: "Designer" },
+    { value: "Product Manager", label: "Product Manager" },
+    { value: "QA Engineer", label: "QA Engineer" },
+    { value: "DevOps Engineer", label: "DevOps Engineer" },
+    { value: "Scrum Master", label: "Scrum Master" },
+    { value: "Team Lead", label: "Team Lead" },
+  ];
 
   // Initialize form when modal opens or user changes
   $effect(() => {
@@ -116,19 +129,13 @@
         <Briefcase size={14} class="text-muted-foreground" />
         Role
       </div>
-      <select
-        class="mt-2 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
-        bind:value={formData.rol}
-      >
-        <option value="">Select a role</option>
-        <option value="Developer">Developer</option>
-        <option value="Designer">Designer</option>
-        <option value="Product Manager">Product Manager</option>
-        <option value="QA Engineer">QA Engineer</option>
-        <option value="DevOps Engineer">DevOps Engineer</option>
-        <option value="Scrum Master">Scrum Master</option>
-        <option value="Team Lead">Team Lead</option>
-      </select>
+      <div class="mt-2">
+        <Select
+          bind:value={formData.rol}
+          options={roleOptions}
+          placeholder="Select a role"
+        />
+      </div>
     </label>
   </form>
 {/snippet}

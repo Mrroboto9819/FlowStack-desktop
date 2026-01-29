@@ -14,6 +14,7 @@
   import SprintModal from "../../lib/components/SprintModal.svelte";
   import ConfirmModal from "../../lib/components/ConfirmModal.svelte";
   import { toastStore } from "../../lib/toastStore.svelte.js";
+  import { marked } from "marked";
 
   let sprints = $derived(sprintStore.sprints);
   let allTasks = $derived(taskStore.tasks);
@@ -188,14 +189,6 @@
                       {sprint.status}
                     </span>
                   </div>
-                  {#if sprint.goal}
-                    <p
-                      class="text-sm text-muted-foreground flex items-center gap-2"
-                    >
-                      <Target size={14} />
-                      {sprint.goal}
-                    </p>
-                  {/if}
                 </div>
                 <div class="flex items-center gap-2">
                   <button
@@ -216,6 +209,19 @@
                   </button>
                 </div>
               </div>
+
+              <!-- Sprint Goal -->
+              {#if sprint.goal}
+                <div class="mb-4 space-y-2">
+                  <h4 class="text-xs font-semibold uppercase tracking-wide text-muted-foreground flex items-center gap-2">
+                    <Target size={12} />
+                    Sprint Goal
+                  </h4>
+                  <div class="rounded-lg border border-border bg-background p-4 prose prose-sm dark:prose-invert max-w-none">
+                    {@html marked(sprint.goal)}
+                  </div>
+                </div>
+              {/if}
 
               <!-- Sprint Stats -->
               <div class="grid gap-4 sm:grid-cols-4 mt-4">
@@ -323,7 +329,7 @@
             >
               <div class="flex items-start justify-between gap-3 mb-4">
                 <div class="flex-1 min-w-0">
-                  <div class="flex items-center gap-2 mb-2">
+                  <div class="flex items-center gap-2">
                     <h3 class="text-lg font-bold text-foreground">
                       {sprint.name}
                     </h3>
@@ -333,13 +339,21 @@
                       {sprint.status}
                     </span>
                   </div>
-                  {#if sprint.goal}
-                    <p class="text-xs text-muted-foreground line-clamp-2">
-                      {sprint.goal}
-                    </p>
-                  {/if}
                 </div>
               </div>
+
+              <!-- Sprint Goal -->
+              {#if sprint.goal}
+                <div class="mb-4 space-y-2">
+                  <h4 class="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground flex items-center gap-1.5">
+                    <Target size={10} />
+                    Sprint Goal
+                  </h4>
+                  <div class="rounded-lg border border-border bg-background p-3 prose prose-xs dark:prose-invert max-w-none">
+                    {@html marked(sprint.goal)}
+                  </div>
+                </div>
+              {/if}
 
               <div class="grid grid-cols-3 gap-3 mb-4">
                 <div

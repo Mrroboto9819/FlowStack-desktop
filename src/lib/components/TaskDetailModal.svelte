@@ -1,7 +1,8 @@
 <script>
-  import { X, Pencil, Trash2, Calendar, User, Target, Tag, Clock, Hash, AlertCircle, Activity, Layers3, CheckCircle2, AlertTriangle } from "lucide-svelte";
+  import { X, Pencil, Trash2, Calendar, User, Target, Tag, Clock, Hash, AlertCircle, Activity, Layers3, CheckCircle2, AlertTriangle, ListTodo, Check } from "lucide-svelte";
   import { marked } from "marked";
-  import { sprintStore } from "../stores/index.js";
+  import { sprintStore, taskStore } from "../stores/index.js";
+  import TaskTimer from "./TaskTimer.svelte";
 
   let {
     open = $bindable(false),
@@ -147,6 +148,25 @@
             {/if}
           </div>
 
+          <!-- Timer -->
+          <div class="space-y-2">
+            <h3 class="text-sm font-semibold uppercase tracking-wide text-muted-foreground flex items-center gap-2">
+              <Clock size={14} />
+              Time Tracker
+            </h3>
+            <div class="rounded-lg border border-border bg-background p-4">
+              <TaskTimer
+                taskId={task.id}
+                elapsedSeconds={task.elapsedSeconds || 0}
+                isRunning={task.timerRunning || false}
+                onStart={(id) => taskStore.startTimer(id)}
+                onPause={(id, elapsed) => taskStore.pauseTimer(id, elapsed)}
+                onReset={(id) => taskStore.resetTimer(id)}
+                compact={false}
+              />
+            </div>
+          </div>
+
           <!-- Description -->
           {#if task.description}
             <div class="space-y-2">
@@ -168,6 +188,46 @@
               </h3>
               <div class="rounded-lg border border-border bg-background p-4">
                 <p class="text-sm text-foreground whitespace-pre-wrap">{task.acceptance}</p>
+              </div>
+            </div>
+          {/if}
+
+          <!-- Subtasks -->
+          {#if task.subtasks && Array.isArray(task.subtasks) && task.subtasks.length > 0}
+            <div class="space-y-2">
+              <h3 class="text-sm font-semibold uppercase tracking-wide text-muted-foreground flex items-center gap-2">
+                <ListTodo size={14} />
+                Subtasks
+              </h3>
+              <div class="rounded-lg border border-border bg-background p-4 space-y-2">
+                {#each task.subtasks as subtask (subtask.id)}
+                  <button
+                    type="button"
+                    class="w-full flex items-center gap-2 rounded-lg p-2 hover:bg-muted/50 transition-all text-left"
+                    onclick={() => taskStore.toggleSubtask(task.id, subtask.id)}
+                  >
+                    <div
+                      class={`flex h-5 w-5 flex-shrink-0 items-center justify-center rounded border transition-all ${
+                        subtask.completed
+                          ? "border-primary bg-primary text-primary-foreground"
+                          : "border-border bg-background"
+                      }`}
+                    >
+                      {#if subtask.completed}
+                        <Check size={12} />
+                      {/if}
+                    </div>
+                    <span
+                      class={`flex-1 text-sm ${
+                        subtask.completed
+                          ? "text-muted-foreground line-through"
+                          : "text-foreground"
+                      }`}
+                    >
+                      {subtask.text}
+                    </span>
+                  </button>
+                {/each}
               </div>
             </div>
           {/if}

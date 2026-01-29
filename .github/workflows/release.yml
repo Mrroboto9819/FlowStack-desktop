@@ -13,18 +13,28 @@ jobs:
         include:
           - platform: ubuntu-latest
             args: ""
+            rust_targets: ""
           - platform: windows-latest
             args: ""
+            rust_targets: ""
           - platform: macos-latest
-            args: ""
-          - platform: macos-13
-            args: ""
+            args: --target aarch64-apple-darwin
+            rust_targets: aarch64-apple-darwin
+          - platform: macos-latest
+            args: --target x86_64-apple-darwin
+            rust_targets: x86_64-apple-darwin
 
     permissions:
       contents: write
 
     steps:
       - uses: actions/checkout@v4
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.rust_targets }}
+
       - uses: oven-sh/setup-bun@v1
         with:
           bun-version: latest

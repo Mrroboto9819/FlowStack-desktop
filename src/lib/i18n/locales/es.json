@@ -1,0 +1,352 @@
+{
+  "common": {
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "create": "Crear",
+    "confirm": "Confirmar",
+    "close": "Cerrar",
+    "loading": "Cargando...",
+    "search": "Buscar",
+    "filter": "Filtrar",
+    "all": "Todos",
+    "none": "Ninguno",
+    "yes": "Sí",
+    "no": "No"
+  },
+  "nav": {
+    "sprint": "Sprint",
+    "tasks": "Tareas",
+    "backlog": "Backlog",
+    "sprints": "Sprints",
+    "team": "Equipo",
+    "boardSettings": "Configuración"
+  },
+  "sidebar": {
+    "expandSidebar": "Expandir barra lateral",
+    "collapseSidebar": "Contraer barra lateral",
+    "signUp": "Registrarse",
+    "preferences": "Preferencias",
+    "freeAccount": "Cuenta Gratuita",
+    "comingSoon": {
+      "title": "¡Próximamente!",
+      "message": "Estamos trabajando en esta función. ¡Mantente atento a las actualizaciones!",
+      "button": "Entendido"
+    }
+  },
+  "titlebar": {
+    "toggleTheme": "Cambiar tema",
+    "changeLanguage": "Cambiar idioma"
+  },
+  "update": {
+    "available": "v{version} disponible",
+    "title": "Actualización Disponible",
+    "message": "Una nueva versión (v{version}) está disponible. ¿Te gustaría descargarla e instalarla ahora?",
+    "updateNow": "Actualizar Ahora",
+    "later": "Más Tarde"
+  },
+  "settings": {
+    "title": "Configuración",
+    "description": "Configura tu flujo de trabajo y preferencias de la aplicación",
+    "tabs": {
+      "statuses": "Columnas de Estado",
+      "tags": "Etiquetas"
+    },
+    "statuses": {
+      "title": "Columnas de Estado",
+      "description": "Gestiona las etapas de tu flujo de trabajo y su visibilidad",
+      "newStatus": "Nuevo Estado",
+      "noStatuses": "Sin Columnas de Estado",
+      "createFirst": "Crear Primer Estado",
+      "createFirstDesc": "Crea columnas de estado para organizar tu flujo de trabajo",
+      "visible": "Visible",
+      "hidden": "Oculto",
+      "created": "Creado",
+      "deleteTitle": "Eliminar Estado",
+      "deleteMessage": "¿Estás seguro de que deseas eliminar el estado \"{name}\"? Las tareas con este estado deberán actualizarse manualmente.",
+      "tip": "Arrastra y suelta las columnas de estado para reordenarlas. El orden que establezcas aquí se reflejará en los tableros de tareas y vistas de sprint. Las columnas ocultas no aparecerán en la vista del tablero, pero las tareas existentes mantendrán su estado."
+    },
+    "tags": {
+      "title": "Etiquetas",
+      "description": "Crea y gestiona etiquetas para organizar tareas",
+      "newTag": "Nueva Etiqueta",
+      "noTags": "Sin Etiquetas",
+      "createFirst": "Crear Primera Etiqueta",
+      "createFirstDesc": "Crea etiquetas para categorizar y filtrar tus tareas",
+      "created": "Creado",
+      "deleteTitle": "Eliminar Etiqueta",
+      "deleteMessage": "¿Estás seguro de que deseas eliminar la etiqueta \"{name}\"? Esto no afectará las tareas existentes.",
+      "tip": "Las etiquetas te ayudan a categorizar tareas en diferentes sprints y columnas de estado. Puedes agregar múltiples etiquetas a cualquier tarea para una mejor organización."
+    }
+  },
+  "preferences": {
+    "title": "Preferencias",
+    "description": "Personaliza tu experiencia en TaskFlow",
+    "userProfile": {
+      "title": "Perfil de Usuario",
+      "displayName": "Nombre para Mostrar",
+      "placeholder": "Ingresa tu nombre"
+    },
+    "appearance": {
+      "title": "Apariencia",
+      "darkMode": "Modo Oscuro",
+      "darkModeDescription": "Alternar tema claro/oscuro",
+      "themeColor": "Color del Tema"
+    },
+    "dataManagement": {
+      "title": "Gestión de Datos",
+      "clearData": "Borrar Todos los Datos",
+      "clearDataDescription": "Esto eliminará todas las tareas, sprints, miembros del equipo y configuraciones de tu navegador. Tus preferencias (tema, nombre) se conservarán. Esta acción no se puede deshacer.",
+      "confirmClear": "¿Estás seguro de que deseas eliminar todas tus tareas, sprints, miembros del equipo y configuraciones del tablero? Esta acción no se puede deshacer. Tus preferencias (tema, nombre) se conservarán."
+    },
+    "about": {
+      "title": "Acerca de",
+      "version": "Versión",
+      "storageUsed": "Almacenamiento Usado"
+    },
+    "language": {
+      "title": "Idioma",
+      "description": "Selecciona tu idioma preferido"
+    }
+  },
+  "tasks": {
+    "title": "Todas las Tareas",
+    "description": "Ver y gestionar todas las tareas con arrastrar y soltar",
+    "newTask": "Nueva tarea",
+    "noTasks": "No se encontraron tareas",
+    "createFirst": "Crea tu primera tarea",
+    "filtersStats": "Filtros y Estadísticas",
+    "filtersDescription": "Filtra tareas y ve estadísticas",
+    "clearFilters": "Limpiar filtros",
+    "copySummary": "Copiar resumen",
+    "filterStatus": "Estado",
+    "filterTag": "Etiqueta",
+    "filterFrom": "Desde",
+    "filterTo": "Hasta",
+    "selectStatus": "Seleccionar estado",
+    "startDate": "Fecha de inicio",
+    "endDate": "Fecha de fin",
+    "totalTasks": "Total de tareas",
+    "filteredTasks": "Tareas filtradas",
+    "totalUsers": "Total de usuarios",
+    "noMatchFilters": "Ninguna tarea coincide con tus filtros. Intenta limpiar los filtros o ajustar el rango de fechas.",
+    "updated": "Actualizado",
+    "blocked": "Bloqueado",
+    "subtasks": "subtareas",
+    "dropTasksHere": "Suelta tareas aquí",
+    "viewDetails": "Ver Detalles",
+    "deleteTask": "Eliminar Tarea",
+    "deleteTaskMessage": "¿Estás seguro de que deseas eliminar \"{title}\"? Esta acción no se puede deshacer.",
+    "filtersCleared": "Filtros limpiados",
+    "summaryCopied": "Resumen copiado al portapapeles",
+    "noTasksInStatus": "(sin tareas)",
+    "modal": {
+      "createTitle": "Nueva Tarea",
+      "editTitle": "Editar Tarea",
+      "fields": {
+        "title": "Título",
+        "titlePlaceholder": "Implementar arrastrar y soltar MVP",
+        "description": "Descripción (Markdown)",
+        "descriptionPlaceholder": "Qué necesita hacerse. Se admite Markdown.",
+        "type": "Tipo",
+        "points": "Puntos",
+        "priority": "Prioridad",
+        "epic": "Épica",
+        "tags": "Etiquetas",
+        "assign": "Asignar",
+        "status": "Estado",
+        "sprint": "Sprint",
+        "time": "Tiempo",
+        "acceptance": "Criterios de aceptación",
+        "acceptancePlaceholder": "Dado..., cuando..., entonces...",
+        "subtasks": "Subtareas",
+        "blocked": "Estado: Bloqueado",
+        "blockerReason": "Razón del bloqueo",
+        "blockerPlaceholder": "Esperando acceso a la API"
+      },
+      "preview": {
+        "write": "Escribir",
+        "split": "Dividir",
+        "preview": "Vista previa",
+        "noDescription": "Sin descripción para previsualizar."
+      },
+      "actions": {
+        "create": "Crear Tarea",
+        "save": "Guardar Cambios"
+      }
+    },
+    "types": {
+      "story": "Historia",
+      "bug": "Error",
+      "chore": "Tarea"
+    },
+    "priority": {
+      "low": "Baja",
+      "medium": "Media",
+      "high": "Alta",
+      "critical": "Crítica"
+    },
+    "unassigned": "Sin asignar",
+    "backlog": "Backlog",
+    "addToSprint": "Agregar al sprint",
+    "removeFromSprint": "Quitar del sprint"
+  },
+  "sprint": {
+    "title": "Tablero de Sprint",
+    "description": "Enfócate en el sprint activo y mueve el trabajo a completado",
+    "activeSprint": "Sprint Activo",
+    "currentStatus": "Estado y progreso del sprint actual",
+    "newSprint": "Nuevo Sprint",
+    "items": "Elementos",
+    "points": "Puntos",
+    "closeSprint": "Cerrar Sprint",
+    "noActiveSprint": "Sin Sprint Activo",
+    "noActiveSprintDesc": "Crea un nuevo sprint, agrega tareas y actívalo para iniciar tu iteración.",
+    "createSprint": "Crear Sprint",
+    "allSprints": "Todos los Sprints",
+    "start": "Iniciar",
+    "close": "Cerrar",
+    "remove": "Eliminar",
+    "noSprintsYet": "No hay sprints creados todavía. Inicia un nuevo ciclo de sprint para gestionar la carga de trabajo de tu equipo.",
+    "updated": "Actualizado",
+    "pts": "pts",
+    "dropTasksHere": "Suelta tareas aquí",
+    "deleteSprint": "Eliminar Sprint",
+    "deleteSprintMessage": "¿Estás seguro de que deseas eliminar \"{name}\"? Esta acción no se puede deshacer.",
+    "deleteTaskMessage": "¿Estás seguro de que deseas eliminar \"{title}\"? Esta acción no se puede deshacer.",
+    "blocked": "Bloqueado"
+  },
+  "backlog": {
+    "title": "Backlog del Producto",
+    "description": "Prioriza y prepara elementos para el próximo sprint",
+    "overview": "Resumen del Backlog",
+    "trackMetrics": "Rastrea las métricas de tu backlog",
+    "newItem": "Nuevo elemento",
+    "items": "Elementos en backlog",
+    "itemsList": "Elementos del Backlog",
+    "activeSprint": "Sprint activo",
+    "pointsInBacklog": "Puntos en backlog",
+    "addToSprint": "Agregar al sprint",
+    "view": "Ver",
+    "empty": "El backlog está vacío",
+    "emptyMessage": "Agrega elementos para planificar tu próximo sprint.",
+    "createFirst": "Crear primer elemento",
+    "noActiveSprint": "No hay sprint activo disponible",
+    "taskAddedToSprint": "Tarea agregada al sprint",
+    "pts": "pts"
+  },
+  "sprints": {
+    "title": "Gestión de Sprints",
+    "description": "Planifica, activa y rastrea tus sprints",
+    "newSprint": "Nuevo Sprint",
+    "noSprints": "Sin sprints todavía",
+    "createFirst": "Crea tu primer sprint",
+    "createFirstDesc": "Crea tu primer sprint para comenzar a organizar tus tareas en iteraciones con tiempo definido.",
+    "activeSprint": "Sprint Activo",
+    "plannedSprints": "Sprints Planificados",
+    "completedSprints": "Sprints Completados",
+    "sprintGoal": "Objetivo del Sprint",
+    "tasks": "Tareas",
+    "points": "Puntos",
+    "startDate": "Fecha de Inicio",
+    "daysLeft": "Días Restantes",
+    "progress": "Progreso",
+    "activate": "Activar",
+    "complete": "Completar",
+    "starts": "Inicia",
+    "completed": "Completados",
+    "ended": "Terminó",
+    "completeSprint": "Completar Sprint",
+    "completeSprintMessage": "¿Estás seguro de que deseas completar \"{name}\"? Esto cerrará el sprint y lo marcará como completado.",
+    "deleteSprintMessage": "¿Estás seguro de que deseas eliminar \"{name}\"? Esto no eliminará las tareas, pero serán movidas al backlog.",
+    "modal": {
+      "createTitle": "Nuevo Sprint",
+      "editTitle": "Editar Sprint",
+      "fields": {
+        "name": "Nombre",
+        "namePlaceholder": "Sprint 1",
+        "startDate": "Fecha de Inicio",
+        "endDate": "Fecha de Fin",
+        "goal": "Objetivo",
+        "goalPlaceholder": "¿Qué quieres lograr?"
+      },
+      "actions": {
+        "create": "Crear Sprint",
+        "save": "Guardar Cambios"
+      }
+    },
+    "status": {
+      "active": "Activo",
+      "completed": "Completado",
+      "planned": "Planificado"
+    }
+  },
+  "team": {
+    "title": "Equipo",
+    "description": "Gestiona los miembros de tu equipo y sus roles",
+    "addMember": "Agregar Miembro",
+    "newMember": "Nuevo Miembro",
+    "teamMembers": "Miembros del Equipo",
+    "member": "miembro",
+    "members": "miembros",
+    "totalMembers": "Total de Miembros",
+    "roles": "Roles",
+    "withTasks": "Con Tareas",
+    "noTeamMembers": "Sin Miembros del Equipo",
+    "noMembers": "Sin miembros del equipo todavía",
+    "addFirstMember": "Agregar Primer Miembro",
+    "addMemberDesc": "Agrega miembros del equipo para asignar tareas y colaborar efectivamente.",
+    "createFirst": "Agrega tu primer miembro del equipo",
+    "totalTasks": "Total de Tareas",
+    "active": "Activas",
+    "removeMember": "Eliminar Miembro del Equipo",
+    "removeMemberMessage": "¿Estás seguro de que deseas eliminar a {name} del equipo? Esto no eliminará sus tareas asignadas.",
+    "remove": "Eliminar",
+    "modal": {
+      "createTitle": "Nuevo Miembro del Equipo",
+      "editTitle": "Editar Miembro del Equipo",
+      "fields": {
+        "name": "Nombre",
+        "namePlaceholder": "Juan Pérez",
+        "role": "Rol",
+        "rolePlaceholder": "Desarrollador",
+        "email": "Correo electrónico",
+        "emailPlaceholder": "juan@ejemplo.com"
+      },
+      "actions": {
+        "create": "Agregar Miembro",
+        "save": "Guardar Cambios"
+      }
+    }
+  },
+  "confirmModal": {
+    "defaultTitle": "Confirmar Acción",
+    "defaultMessage": "¿Estás seguro de que deseas continuar?"
+  },
+  "toast": {
+    "dataLoaded": "Datos cargados",
+    "dataSaved": "Datos guardados",
+    "dataCleared": "Todos los datos eliminados",
+    "themeSet": "Tema establecido a {theme}",
+    "taskCreated": "Tarea creada",
+    "taskUpdated": "Tarea actualizada",
+    "taskDeleted": "Tarea eliminada",
+    "sprintCreated": "Sprint creado",
+    "sprintUpdated": "Sprint actualizado",
+    "sprintDeleted": "Sprint eliminado",
+    "memberCreated": "Miembro del equipo agregado",
+    "memberUpdated": "Miembro del equipo actualizado",
+    "memberDeleted": "Miembro del equipo eliminado",
+    "statusCreated": "Estado creado",
+    "statusUpdated": "Estado actualizado",
+    "statusDeleted": "Estado eliminado",
+    "tagCreated": "Etiqueta creada",
+    "tagUpdated": "Etiqueta actualizada",
+    "tagDeleted": "Etiqueta eliminada"
+  },
+  "emptyState": {
+    "title": "Nada aquí todavía",
+    "message": "Comienza creando tu primer elemento"
+  }
+}

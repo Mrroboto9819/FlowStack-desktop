@@ -5,6 +5,7 @@
   import TaskDetailModal from "../../lib/components/TaskDetailModal.svelte";
   import { toastStore } from "../../lib/toastStore.svelte.js";
   import { marked } from "marked";
+  import { _ } from "$lib/i18n";
 
   let allTasks = $derived(taskStore.tasks);
   let sprints = $derived(sprintStore.sprints);
@@ -53,11 +54,11 @@
   // Move task to active sprint
   function moveToSprint(taskId) {
     if (!activeSprint) {
-      toastStore.warning("No active sprint available");
+      toastStore.warning($_("backlog.noActiveSprint"));
       return;
     }
     taskStore.update(taskId, { sprintId: activeSprint.id });
-    toastStore.success("Task added to sprint");
+    toastStore.success($_("backlog.taskAddedToSprint"));
   }
 
   // Priority colors
@@ -76,8 +77,8 @@
 <main class="min-h-screen px-6 pt-6 pb-10">
   <!-- Header with Title & Description -->
   <header class="mb-6">
-    <h1 class="text-3xl font-bold text-foreground">Product Backlog</h1>
-    <p class="text-muted-foreground mt-1">Prioritize and prepare items for the next sprint</p>
+    <h1 class="text-3xl font-bold text-foreground">{$_("backlog.title")}</h1>
+    <p class="text-muted-foreground mt-1">{$_("backlog.description")}</p>
   </header>
 
   <div class="space-y-6">
@@ -85,8 +86,8 @@
     <div class="rounded-2xl border border-border bg-card p-6 shadow-sm">
       <div class="flex flex-wrap items-center justify-between gap-4 mb-5">
         <div>
-          <h2 class="text-lg font-semibold text-foreground">Backlog Overview</h2>
-          <p class="text-sm text-muted-foreground">Track your backlog metrics</p>
+          <h2 class="text-lg font-semibold text-foreground">{$_("backlog.overview")}</h2>
+          <p class="text-sm text-muted-foreground">{$_("backlog.trackMetrics")}</p>
         </div>
         <button
           type="button"
@@ -94,7 +95,7 @@
           onclick={openTaskModal}
         >
           <Plus size={16} />
-          New backlog item
+          {$_("backlog.newItem")}
         </button>
       </div>
 
@@ -102,7 +103,7 @@
       <div class="grid gap-4 sm:grid-cols-3">
         <div class="rounded-xl border border-border bg-background px-4 py-3">
           <p class="text-xs uppercase tracking-wide text-muted-foreground">
-            Backlog items
+            {$_("backlog.items")}
           </p>
           <p class="mt-2 text-2xl font-bold text-foreground">
             {backlogItems.length}
@@ -110,15 +111,15 @@
         </div>
         <div class="rounded-xl border border-border bg-background px-4 py-3">
           <p class="text-xs uppercase tracking-wide text-muted-foreground">
-            Active sprint
+            {$_("backlog.activeSprint")}
           </p>
           <p class="mt-2 text-sm font-semibold text-foreground">
-            {activeSprint ? activeSprint.name : "None"}
+            {activeSprint ? activeSprint.name : $_("common.none")}
           </p>
         </div>
         <div class="rounded-xl border border-border bg-background px-4 py-3">
           <p class="text-xs uppercase tracking-wide text-muted-foreground">
-            Points in backlog
+            {$_("backlog.pointsInBacklog")}
           </p>
           <p class="mt-2 text-2xl font-bold text-foreground">
             {getTotalPoints(backlogItems)}
@@ -130,7 +131,7 @@
     <!-- Backlog List -->
     <div class="rounded-2xl border border-border bg-card p-6 shadow-sm">
       <div class="flex items-center justify-between mb-4">
-        <h3 class="text-base font-semibold text-foreground">Backlog Items</h3>
+        <h3 class="text-base font-semibold text-foreground">{$_("backlog.itemsList")}</h3>
       </div>
 
       <div class="grid gap-4 md:grid-cols-2">
@@ -164,17 +165,17 @@
                 <!-- Badges -->
                 <div class="flex flex-wrap items-center gap-2">
                   <span class="inline-flex items-center rounded-full border border-border bg-muted px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-foreground">
-                    {task.type || "story"}
+                    {$_(`tasks.types.${task.type || "story"}`)}
                   </span>
 
                   {#if task.points}
                     <span class="inline-flex items-center rounded-full border border-primary/30 bg-primary/10 px-2 py-0.5 text-[10px] font-semibold text-primary">
-                      {task.points} pts
+                      {task.points} {$_("backlog.pts")}
                     </span>
                   {/if}
 
                   <span class={`inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide ${priorityColor.bg} ${priorityColor.border} ${priorityColor.text}`}>
-                    {task.priority || "medium"}
+                    {$_(`tasks.priority.${task.priority || "medium"}`)}
                   </span>
 
                   {#if task.epic}
@@ -193,10 +194,10 @@
                     type="button"
                     class="btn btn-primary px-3 py-1.5 text-[11px] whitespace-nowrap"
                     onclick={() => moveToSprint(task.id)}
-                    title="Add to {activeSprint.name}"
+                    title="{$_('backlog.addToSprint')} - {activeSprint.name}"
                   >
                     <TrendingUp size={12} />
-                    Add to sprint
+                    {$_("backlog.addToSprint")}
                   </button>
                 {/if}
                 <button
@@ -205,7 +206,7 @@
                   onclick={() => editTask(task)}
                 >
                   <Pencil size={12} />
-                  Edit
+                  {$_("common.edit")}
                 </button>
                 <button
                   type="button"
@@ -213,7 +214,7 @@
                   onclick={() => viewTaskDetail(task)}
                 >
                   <Eye size={12} />
-                  View
+                  {$_("backlog.view")}
                 </button>
               </div>
             </div>
@@ -221,7 +222,7 @@
         {:else}
           <div class="col-span-2 rounded-xl border border-dashed border-border p-8 text-center">
             <p class="text-sm text-muted-foreground">
-              Backlog is empty. Add items to plan your next sprint.
+              {$_("backlog.empty")} {$_("backlog.emptyMessage")}
             </p>
             <button
               type="button"
@@ -229,7 +230,7 @@
               onclick={openTaskModal}
             >
               <Plus size={16} />
-              Create first item
+              {$_("backlog.createFirst")}
             </button>
           </div>
         {/each}

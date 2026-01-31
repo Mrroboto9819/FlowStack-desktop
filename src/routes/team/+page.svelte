@@ -12,6 +12,7 @@
   import { userStore, taskStore } from "../../lib/stores/index.js";
   import UserModal from "../../lib/components/UserModal.svelte";
   import ConfirmModal from "../../lib/components/ConfirmModal.svelte";
+  import { _ } from "$lib/i18n";
 
   let users = $derived(userStore.users);
   let allTasks = $derived(taskStore.tasks);
@@ -141,9 +142,9 @@
   <!-- Header -->
   <header class="mb-6 flex items-center justify-between">
     <div>
-      <h1 class="text-3xl font-bold text-foreground">Team</h1>
+      <h1 class="text-3xl font-bold text-foreground">{$_("team.title")}</h1>
       <p class="text-muted-foreground mt-1">
-        Manage your team members and their roles
+        {$_("team.description")}
       </p>
     </div>
     <button
@@ -152,7 +153,7 @@
       onclick={openUserModal}
     >
       <Plus size={16} />
-      Add Member
+      {$_("team.addMember")}
     </button>
   </header>
 
@@ -166,7 +167,7 @@
               class="text-xs uppercase tracking-wide text-muted-foreground flex items-center gap-1"
             >
               <Users2 size={12} />
-              Total Members
+              {$_("team.totalMembers")}
             </p>
             <p class="mt-2 text-2xl font-bold text-foreground">
               {users.length}
@@ -177,7 +178,7 @@
               class="text-xs uppercase tracking-wide text-muted-foreground flex items-center gap-1"
             >
               <Briefcase size={12} />
-              Roles
+              {$_("team.roles")}
             </p>
             <p class="mt-2 text-2xl font-bold text-foreground">
               {Object.keys(usersByRole()).length}
@@ -188,7 +189,7 @@
               class="text-xs uppercase tracking-wide text-muted-foreground flex items-center gap-1"
             >
               <UserCheck size={12} />
-              With Tasks
+              {$_("team.withTasks")}
             </p>
             <p class="mt-2 text-2xl font-bold text-foreground">
               {users.filter(
@@ -210,22 +211,22 @@
           class="mx-auto mb-4 text-muted-foreground opacity-50"
         />
         <h3 class="text-lg font-semibold text-foreground mb-2">
-          No Team Members
+          {$_("team.noTeamMembers")}
         </h3>
         <p class="text-sm text-muted-foreground mb-4">
-          Add team members to assign tasks and collaborate effectively.
+          {$_("team.addMemberDesc")}
         </p>
         <button type="button" class="btn btn-primary" onclick={openUserModal}>
           <Plus size={16} />
-          Add First Member
+          {$_("team.addFirstMember")}
         </button>
       </div>
     {:else}
       <div class="rounded-2xl border border-border bg-card p-6 shadow-sm">
         <div class="flex items-center justify-between mb-5">
-          <h2 class="text-lg font-semibold text-foreground">Team Members</h2>
+          <h2 class="text-lg font-semibold text-foreground">{$_("team.teamMembers")}</h2>
           <p class="text-sm text-muted-foreground">
-            {users.length} member{users.length === 1 ? "" : "s"}
+            {users.length} {users.length === 1 ? $_("team.member") : $_("team.members")}
           </p>
         </div>
 
@@ -302,7 +303,7 @@
                   <p
                     class="text-[9px] uppercase tracking-wide text-muted-foreground"
                   >
-                    Total Tasks
+                    {$_("team.totalTasks")}
                   </p>
                   <p class="mt-1 text-lg font-bold text-foreground">
                     {taskCount}
@@ -312,7 +313,7 @@
                   <p
                     class="text-[9px] uppercase tracking-wide text-muted-foreground"
                   >
-                    Active
+                    {$_("team.active")}
                   </p>
                   <p class="mt-1 text-lg font-bold text-primary">
                     {activeTasks}
@@ -333,12 +334,12 @@
 <!-- Confirm Delete Modal -->
 <ConfirmModal
   bind:open={confirmModalOpen}
-  title="Remove Team Member"
+  title={$_("team.removeMember")}
   message={userToDelete
-    ? `Are you sure you want to remove ${userToDelete.name} ${userToDelete.lastname || ""} from the team? This will not delete their assigned tasks.`
-    : "Are you sure you want to remove this team member?"}
-  confirmText="Remove"
-  cancelText="Cancel"
+    ? $_("team.removeMemberMessage", { values: { name: `${userToDelete.name} ${userToDelete.lastname || ""}` } })
+    : $_("confirmModal.defaultMessage")}
+  confirmText={$_("team.remove")}
+  cancelText={$_("common.cancel")}
   variant="danger"
   onConfirm={handleConfirmDelete}
 />

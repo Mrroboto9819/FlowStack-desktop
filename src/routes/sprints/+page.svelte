@@ -15,6 +15,7 @@
   import ConfirmModal from "../../lib/components/ConfirmModal.svelte";
   import { toastStore } from "../../lib/toastStore.svelte.js";
   import { marked } from "marked";
+  import { _ } from "$lib/i18n";
 
   let sprints = $derived(sprintStore.sprints);
   let allTasks = $derived(taskStore.tasks);
@@ -140,9 +141,9 @@
   <!-- Header -->
   <header class="mb-6 flex items-center justify-between">
     <div>
-      <h1 class="text-3xl font-bold text-foreground">Sprint Management</h1>
+      <h1 class="text-3xl font-bold text-foreground">{$_("sprints.title")}</h1>
       <p class="text-muted-foreground mt-1">
-        Plan, activate, and track your sprints
+        {$_("sprints.description")}
       </p>
     </div>
     <button
@@ -151,7 +152,7 @@
       onclick={openSprintModal}
     >
       <Plus size={16} />
-      New Sprint
+      {$_("sprints.newSprint")}
     </button>
   </header>
 
@@ -163,7 +164,7 @@
           class="text-xl font-bold text-foreground mb-4 flex items-center gap-2"
         >
           <Play size={20} class="text-primary" />
-          Active Sprint
+          {$_("sprints.activeSprint")}
         </h2>
         <div class="grid gap-4">
           {#each activeSprints as sprint (sprint.id)}
@@ -197,7 +198,7 @@
                     onclick={() => editSprint(sprint)}
                   >
                     <Pencil size={14} />
-                    Edit
+                    {$_("common.edit")}
                   </button>
                   <button
                     type="button"
@@ -205,7 +206,7 @@
                     onclick={() => confirmCompleteSprint(sprint)}
                   >
                     <CheckCircle size={14} />
-                    Complete
+                    {$_("sprints.complete")}
                   </button>
                 </div>
               </div>
@@ -215,7 +216,7 @@
                 <div class="mb-4 space-y-2">
                   <h4 class="text-xs font-semibold uppercase tracking-wide text-muted-foreground flex items-center gap-2">
                     <Target size={12} />
-                    Sprint Goal
+                    {$_("sprints.sprintGoal")}
                   </h4>
                   <div class="rounded-lg border border-border bg-background p-4 prose prose-sm dark:prose-invert max-w-none">
                     {@html marked(sprint.goal)}
@@ -231,7 +232,7 @@
                   <p
                     class="text-xs uppercase tracking-wide text-muted-foreground"
                   >
-                    Tasks
+                    {$_("sprints.tasks")}
                   </p>
                   <p class="mt-2 text-2xl font-bold text-foreground">
                     {completedTasks.length}/{sprintTasks.length}
@@ -243,7 +244,7 @@
                   <p
                     class="text-xs uppercase tracking-wide text-muted-foreground"
                   >
-                    Points
+                    {$_("sprints.points")}
                   </p>
                   <p class="mt-2 text-2xl font-bold text-foreground">
                     {completedPoints}/{totalPoints}
@@ -256,7 +257,7 @@
                     class="text-xs uppercase tracking-wide text-muted-foreground flex items-center gap-1"
                   >
                     <Calendar size={12} />
-                    Start Date
+                    {$_("sprints.startDate")}
                   </p>
                   <p class="mt-2 text-sm font-semibold text-foreground">
                     {formatDate(sprint.start)}
@@ -269,7 +270,7 @@
                     class="text-xs uppercase tracking-wide text-muted-foreground flex items-center gap-1"
                   >
                     <Clock size={12} />
-                    Days Left
+                    {$_("sprints.daysLeft")}
                   </p>
                   <p
                     class="mt-2 text-2xl font-bold {daysRemaining !== null &&
@@ -288,7 +289,7 @@
                   <div
                     class="flex items-center justify-between text-xs text-muted-foreground mb-2"
                   >
-                    <span>Progress</span>
+                    <span>{$_("sprints.progress")}</span>
                     <span
                       >{Math.round(
                         (completedTasks.length / sprintTasks.length) * 100,
@@ -316,7 +317,7 @@
           class="text-xl font-bold text-foreground mb-4 flex items-center gap-2"
         >
           <Calendar size={20} class="text-primary" />
-          Planned Sprints
+          {$_("sprints.plannedSprints")}
         </h2>
         <div class="grid gap-4 md:grid-cols-2">
           {#each plannedSprints as sprint (sprint.id)}
@@ -347,7 +348,7 @@
                 <div class="mb-4 space-y-2">
                   <h4 class="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground flex items-center gap-1.5">
                     <Target size={10} />
-                    Sprint Goal
+                    {$_("sprints.sprintGoal")}
                   </h4>
                   <div class="rounded-lg border border-border bg-background p-3 prose prose-xs dark:prose-invert max-w-none">
                     {@html marked(sprint.goal)}
@@ -362,7 +363,7 @@
                   <p
                     class="text-[10px] uppercase tracking-wide text-muted-foreground"
                   >
-                    Tasks
+                    {$_("sprints.tasks")}
                   </p>
                   <p class="mt-1 text-lg font-bold text-foreground">
                     {sprintTasks.length}
@@ -374,7 +375,7 @@
                   <p
                     class="text-[10px] uppercase tracking-wide text-muted-foreground"
                   >
-                    Points
+                    {$_("sprints.points")}
                   </p>
                   <p class="mt-1 text-lg font-bold text-foreground">
                     {totalPoints}
@@ -386,7 +387,7 @@
                   <p
                     class="text-[10px] uppercase tracking-wide text-muted-foreground"
                   >
-                    Starts
+                    {$_("sprints.starts")}
                   </p>
                   <p class="mt-1 text-[10px] font-semibold text-foreground">
                     {formatDate(sprint.start)}
@@ -401,7 +402,7 @@
                   onclick={() => activateSprint(sprint.id)}
                 >
                   <Play size={14} />
-                  Activate
+                  {$_("sprints.activate")}
                 </button>
                 <button
                   type="button"
@@ -431,7 +432,7 @@
           class="text-xl font-bold text-foreground mb-4 flex items-center gap-2"
         >
           <CheckCircle size={20} class="text-muted-foreground" />
-          Completed Sprints
+          {$_("sprints.completedSprints")}
         </h2>
         <div class="grid gap-3 md:grid-cols-3">
           {#each closedSprints as sprint (sprint.id)}
@@ -469,7 +470,7 @@
                   <p
                     class="text-[9px] uppercase tracking-wide text-muted-foreground"
                   >
-                    Completed
+                    {$_("sprints.completed")}
                   </p>
                   <p class="mt-1 text-sm font-bold text-foreground">
                     {completedTasks.length}/{sprintTasks.length}
@@ -481,7 +482,7 @@
                   <p
                     class="text-[9px] uppercase tracking-wide text-muted-foreground"
                   >
-                    Ended
+                    {$_("sprints.ended")}
                   </p>
                   <p class="mt-1 text-[9px] font-semibold text-foreground">
                     {formatDate(sprint.end)}
@@ -504,15 +505,14 @@
           class="mx-auto mb-4 text-muted-foreground opacity-50"
         />
         <h3 class="text-lg font-semibold text-foreground mb-2">
-          No sprints yet
+          {$_("sprints.noSprints")}
         </h3>
         <p class="text-sm text-muted-foreground mb-4">
-          Create your first sprint to start organizing your tasks into
-          time-boxed iterations.
+          {$_("sprints.createFirstDesc")}
         </p>
         <button type="button" class="btn btn-primary" onclick={openSprintModal}>
           <Plus size={16} />
-          Create First Sprint
+          {$_("sprints.createFirst")}
         </button>
       </div>
     {/if}
@@ -529,14 +529,14 @@
 <!-- Confirm Modal -->
 <ConfirmModal
   bind:open={confirmModalOpen}
-  title={confirmModalType === "complete" ? "Complete Sprint" : "Delete Sprint"}
+  title={confirmModalType === "complete" ? $_("sprints.completeSprint") : $_("sprint.deleteSprint")}
   message={confirmModalType === "complete" && sprintToComplete
-    ? `Are you sure you want to complete "${sprintToComplete.name}"? This will close the sprint and mark it as completed.`
+    ? $_("sprints.completeSprintMessage", { values: { name: sprintToComplete.name } })
     : confirmModalType === "delete" && sprintToDelete
-      ? `Are you sure you want to delete "${sprintToDelete.name}"? This will not delete the tasks, but they will be moved back to the backlog.`
-      : "Are you sure?"}
-  confirmText={confirmModalType === "complete" ? "Complete Sprint" : "Delete"}
-  cancelText="Cancel"
+      ? $_("sprints.deleteSprintMessage", { values: { name: sprintToDelete.name } })
+      : $_("confirmModal.defaultMessage")}
+  confirmText={confirmModalType === "complete" ? $_("sprints.completeSprint") : $_("common.delete")}
+  cancelText={$_("common.cancel")}
   variant={confirmModalType === "complete" ? "info" : "danger"}
   onConfirm={handleConfirm}
 />

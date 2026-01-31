@@ -18,15 +18,15 @@
   import { page } from "$app/stores";
   import { goto } from "$app/navigation";
   import { currentUserStore } from "../stores/index.js";
+  import { _ } from "$lib/i18n";
 
   const navItems = [
-    // { href: "/old", label: "old view", icon: TimerIcon },
-    { href: "/sprint", label: "Sprint", icon: KanbanSquare },
-    { href: "/tasks", label: "Tasks", icon: Clipboard },
-    { href: "/backlog", label: "Backlog", icon: Layers3 },
-    { href: "/sprints", label: "Sprints", icon: Calendar },
-    { href: "/team", label: "Team", icon: Users },
-    { href: "/settings", label: "Board Settings", icon: Settings },
+    { href: "/sprint", labelKey: "nav.sprint", icon: KanbanSquare },
+    { href: "/tasks", labelKey: "nav.tasks", icon: Clipboard },
+    { href: "/backlog", labelKey: "nav.backlog", icon: Layers3 },
+    { href: "/sprints", labelKey: "nav.sprints", icon: Calendar },
+    { href: "/team", labelKey: "nav.team", icon: Users },
+    { href: "/settings", labelKey: "nav.boardSettings", icon: Settings },
   ];
 
   let { isCollapsed = $bindable(false), contentElement = undefined } = $props();
@@ -253,7 +253,7 @@
       type="button"
       onclick={toggleSidebar}
       class="p-2 rounded-lg text-sidebar-foreground hover:bg-sidebar-accent/50 transition-colors"
-      title={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+      title={isCollapsed ? $_("sidebar.expandSidebar") : $_("sidebar.collapseSidebar")}
     >
       {#if isCollapsed}
         <ChevronRight size={18} />
@@ -272,14 +272,14 @@
         class="flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors group relative {isActive
           ? 'bg-sidebar-accent text-sidebar-accent-foreground'
           : 'text-sidebar-foreground hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground'}"
-        title={isCollapsed ? item.label : ""}
+        title={isCollapsed ? $_(item.labelKey) : ""}
       >
         <Icon size={18} class="flex-shrink-0" />
         <span
           bind:this={labelElements[index]}
           class="whitespace-nowrap overflow-hidden"
         >
-          {item.label}
+          {$_(item.labelKey)}
         </span>
       </a>
     {/each}
@@ -304,7 +304,7 @@
           <p class="text-sm font-semibold text-foreground truncate">
             {userName}
           </p>
-          <p class="text-xs text-muted-foreground">Free Account</p>
+          <p class="text-xs text-muted-foreground">{$_("sidebar.freeAccount")}</p>
         </div>
         <ChevronDown
           size={16}
@@ -339,7 +339,7 @@
       onclick={handleSignUp}
     >
       <LogIn size={16} class="text-muted-foreground" />
-      Sign Up
+      {$_("sidebar.signUp")}
     </button>
     <button
       type="button"
@@ -347,7 +347,7 @@
       onclick={handlePreferences}
     >
       <SlidersHorizontal size={16} class="text-muted-foreground" />
-      Preferences
+      {$_("sidebar.preferences")}
     </button>
   </div>
 {/if}
@@ -371,16 +371,16 @@
         >
           <Settings size={32} class="text-primary" />
         </div>
-        <h2 class="text-xl font-bold text-foreground mb-2">Coming Soon!</h2>
+        <h2 class="text-xl font-bold text-foreground mb-2">{$_("sidebar.comingSoon.title")}</h2>
         <p class="text-sm text-muted-foreground mb-6">
-          We're currently working on this feature. Stay tuned for updates!
+          {$_("sidebar.comingSoon.message")}
         </p>
         <button
           type="button"
           class="btn btn-primary"
           onclick={() => (showComingSoonModal = false)}
         >
-          Got it
+          {$_("sidebar.comingSoon.button")}
         </button>
       </div>
     </div>

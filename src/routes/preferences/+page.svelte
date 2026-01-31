@@ -7,10 +7,12 @@
     Trash2,
     User,
     AlertTriangle,
+    Globe,
   } from "lucide-svelte";
   import { onMount } from "svelte";
   import ConfirmModal from "../../lib/components/ConfirmModal.svelte";
   import { currentUserStore, themeStore } from "../../lib/stores/index.js";
+  import { _, locale, supportedLocales, setLocale } from "$lib/i18n";
 
   let darkMode = $state(true);
   let userName = $state(currentUserStore.name);
@@ -65,8 +67,8 @@
   }
 
   function handleClearData() {
-    // Clear all localStorage except theme preferences
-    const keysToKeep = ["darkMode", "themeColor", "userName"];
+    // Clear all localStorage except theme preferences and language
+    const keysToKeep = ["darkMode", "themeColor", "userName", "taskflow_locale"];
     const keysToRemove: string[] = [];
 
     for (let i = 0; i < localStorage.length; i++) {
@@ -91,9 +93,9 @@
         <SlidersHorizontal size={24} class="text-primary" />
       </div>
       <div>
-        <h1 class="text-3xl font-bold text-foreground">Preferences</h1>
+        <h1 class="text-3xl font-bold text-foreground">{$_("preferences.title")}</h1>
         <p class="text-muted-foreground mt-1">
-          Customize your TaskFlow experience
+          {$_("preferences.description")}
         </p>
       </div>
     </div>
@@ -104,7 +106,7 @@
     <section class="rounded-2xl border border-border bg-card p-6 shadow-sm">
       <div class="flex items-center gap-3 mb-4">
         <User size={20} class="text-primary" />
-        <h2 class="text-lg font-semibold text-foreground">User Profile</h2>
+        <h2 class="text-lg font-semibold text-foreground">{$_("preferences.userProfile.title")}</h2>
       </div>
 
       <div>
@@ -112,7 +114,7 @@
           for="user-name-input"
           class="text-xs font-semibold uppercase tracking-wide text-muted-foreground"
         >
-          Display Name
+          {$_("preferences.userProfile.displayName")}
         </label>
         <div class="mt-2 flex gap-3">
           <input
@@ -120,10 +122,10 @@
             type="text"
             class="flex-1 rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
             bind:value={userName}
-            placeholder="Enter your name"
+            placeholder={$_("preferences.userProfile.placeholder")}
           />
           <button type="button" class="btn btn-primary" onclick={saveUserName}>
-            Save
+            {$_("common.save")}
           </button>
         </div>
       </div>
@@ -133,7 +135,7 @@
     <section class="rounded-2xl border border-border bg-card p-6 shadow-sm">
       <div class="flex items-center gap-3 mb-4">
         <Palette size={20} class="text-primary" />
-        <h2 class="text-lg font-semibold text-foreground">Appearance</h2>
+        <h2 class="text-lg font-semibold text-foreground">{$_("preferences.appearance.title")}</h2>
       </div>
 
       <div class="space-y-4">
@@ -148,9 +150,9 @@
               <Sun size={20} class="text-foreground" />
             {/if}
             <div>
-              <p class="text-sm font-semibold text-foreground">Dark Mode</p>
+              <p class="text-sm font-semibold text-foreground">{$_("preferences.appearance.darkMode")}</p>
               <p class="text-xs text-muted-foreground">
-                Toggle dark/light theme
+                {$_("preferences.appearance.darkModeDescription")}
               </p>
             </div>
           </div>
@@ -172,7 +174,7 @@
 
         <!-- Theme Color Picker -->
         <div class="p-4 rounded-lg bg-muted/30">
-          <p class="text-sm font-semibold text-foreground mb-3">Theme Color</p>
+          <p class="text-sm font-semibold text-foreground mb-3">{$_("preferences.appearance.themeColor")}</p>
           <div class="grid grid-cols-3 gap-3">
             {#each themeColors as theme}
               <button
@@ -197,52 +199,63 @@
       </div>
     </section>
 
-    <!-- Data Management Section -->
+    <!-- Language Section -->
     <section class="rounded-2xl border border-border bg-card p-6 shadow-sm">
       <div class="flex items-center gap-3 mb-4">
-        <Trash2 size={20} class="text-rose-500" />
-        <h2 class="text-lg font-semibold text-foreground">Data Management</h2>
+        <Globe size={20} class="text-primary" />
+        <h2 class="text-lg font-semibold text-foreground">{$_("preferences.language.title")}</h2>
       </div>
 
-      <div class="p-4 rounded-lg border border-rose-500/30 bg-rose-500/5">
-        <div class="flex items-start gap-3 mb-4">
-          <AlertTriangle size={20} class="text-rose-500 flex-shrink-0 mt-0.5" />
-          <div>
-            <p class="text-sm font-semibold text-foreground mb-1">
-              Clear All Data
-            </p>
-            <p class="text-xs text-muted-foreground">
-              This will delete all tasks, sprints, team members, and settings
-              from your browser. Your preferences (theme, name) will be
-              preserved. This action cannot be undone.
-            </p>
-          </div>
+      <div class="p-4 rounded-lg bg-muted/30">
+        <p class="text-sm text-muted-foreground mb-3">{$_("preferences.language.description")}</p>
+        <div class="grid grid-cols-2 gap-3">
+          {#each supportedLocales as lang}
+            <button
+              type="button"
+              class="flex items-center gap-3 px-4 py-3 rounded-lg border-2 transition-all {$locale === lang.code
+                ? 'border-foreground bg-muted/50'
+                : 'border-border hover:border-muted-foreground'}"
+              onclick={() => setLocale(lang.code)}
+            >
+              <img src={lang.flag} alt={lang.name} class="w-6 h-5 object-cover rounded-sm" />
+              <span class="text-sm font-medium text-foreground">{lang.name}</span>
+            </button>
+          {/each}
         </div>
-        <button
-          type="button"
-          class="btn bg-rose-500 hover:bg-rose-600 text-white"
-          onclick={confirmClearData}
-        >
-          <Trash2 size={16} />
-          Clear All Data
-        </button>
       </div>
     </section>
 
     <!-- App Information -->
     <section class="rounded-2xl border border-border bg-card p-6 shadow-sm">
-      <h2 class="text-lg font-semibold text-foreground mb-4">About</h2>
+      <h2 class="text-lg font-semibold text-foreground mb-4">{$_("preferences.about.title")}</h2>
       <div class="space-y-2 text-sm">
         <div class="flex justify-between">
-          <span class="text-muted-foreground">Version</span>
+          <span class="text-muted-foreground">{$_("preferences.about.version")}</span>
           <span class="text-foreground font-medium">2.1.4</span>
         </div>
         <div class="flex justify-between">
-          <span class="text-muted-foreground">Storage Used</span>
+          <span class="text-muted-foreground">{$_("preferences.about.storageUsed")}</span>
           <span class="text-foreground font-medium">
             {Math.round(JSON.stringify(localStorage).length / 1024)} KB
           </span>
         </div>
+      </div>
+    </section>
+
+    <!-- Data Management Section -->
+    <section class="rounded-xl border border-border/50 bg-card/50 p-4">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <Trash2 size={14} class="text-muted-foreground" />
+          <span class="text-sm text-muted-foreground">{$_("preferences.dataManagement.title")}</span>
+        </div>
+        <button
+          type="button"
+          class="text-xs text-rose-500 hover:text-rose-600 hover:underline transition-colors"
+          onclick={confirmClearData}
+        >
+          {$_("preferences.dataManagement.clearData")}
+        </button>
       </div>
     </section>
   </div>
@@ -251,10 +264,10 @@
 <!-- Confirm Clear Data Modal -->
 <ConfirmModal
   bind:open={confirmClearDataOpen}
-  title="Clear All Data"
-  message="Are you sure you want to delete all your tasks, sprints, team members, and board settings? This action cannot be undone. Your preferences (theme, name) will be preserved."
-  confirmText="Clear All Data"
-  cancelText="Cancel"
+  title={$_("preferences.dataManagement.clearData")}
+  message={$_("preferences.dataManagement.confirmClear")}
+  confirmText={$_("preferences.dataManagement.clearData")}
+  cancelText={$_("common.cancel")}
   variant="danger"
   onConfirm={handleClearData}
 />

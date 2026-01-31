@@ -6,7 +6,9 @@
   import Sidebar from "../lib/components/Sidebar.svelte";
   import UpdateScreen from "../lib/UpdateScreen.svelte";
   import ConfirmModal from "../lib/components/ConfirmModal.svelte";
+  import LanguageSelector from "../lib/components/LanguageSelector.svelte";
   import { hydrateAllStores, clearAllStores } from "../lib/stores/index.js";
+  import { _ } from "$lib/i18n";
 
   let { children } = $props();
 
@@ -240,11 +242,12 @@
       <span class="tracking-wide" data-tauri-drag-region>TaskFlow</span>
     </div>
     <div class="titlebar__actions" data-tauri-drag-region="false">
+      <LanguageSelector />
       <button
         class="titlebar__btn"
         type="button"
         onclick={toggleDarkMode}
-        title="Toggle theme"
+        title={$_("titlebar.toggleTheme")}
       >
         {#if darkMode}
           <Sun size={14} />
@@ -288,7 +291,7 @@
         title="Update available - click to install"
       >
         <Download size={12} />
-        v{updateVersion} available
+        {$_("update.available", { values: { version: updateVersion } })}
       </button>
     {/if}
     <div class="pointer-events-none opacity-40 text-[10px] text-muted-foreground font-mono select-none">
@@ -311,10 +314,10 @@
   <!-- Update Confirmation Modal -->
   <ConfirmModal
     bind:open={updateModalOpen}
-    title="Update Available"
-    message={`A new version (v${updateVersion}) is available. Would you like to download and install it now?`}
-    confirmText="Update Now"
-    cancelText="Later"
+    title={$_("update.title")}
+    message={$_("update.message", { values: { version: updateVersion } })}
+    confirmText={$_("update.updateNow")}
+    cancelText={$_("update.later")}
     variant="info"
     onConfirm={handleUpdateConfirm}
     onCancel={handleUpdateCancel}

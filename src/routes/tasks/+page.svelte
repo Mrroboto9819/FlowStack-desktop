@@ -29,6 +29,7 @@
   import { flip } from "svelte/animate";
   import { marked } from "marked";
   import { toastStore } from "../../lib/toastStore.svelte.js";
+  import { _ } from "$lib/i18n";
 
   let allTasks = $derived(taskStore.tasks);
   let users = $derived(userStore.users);
@@ -169,7 +170,7 @@
     filterTag = "";
     filterFrom = "";
     filterTo = "";
-    toastStore.info("Filters cleared");
+    toastStore.info($_("tasks.filtersCleared"));
   }
 
   // Copy summary
@@ -179,7 +180,7 @@
       const list = getTasksForStatus(statusItem.status);
       lines.push(`${statusItem.status}:`);
       if (list.length === 0) {
-        lines.push("- (no tasks)");
+        lines.push(`- ${$_("tasks.noTasksInStatus")}`);
       } else {
         list.forEach((task) => {
           const detail = task.description ? `: ${task.description}` : "";
@@ -191,7 +192,7 @@
     const text = lines.join("\n").trim();
     if (navigator.clipboard?.writeText) {
       navigator.clipboard.writeText(text);
-      toastStore.success("Summary copied to clipboard");
+      toastStore.success($_("tasks.summaryCopied"));
       return;
     }
     const textarea = document.createElement("textarea");
@@ -202,7 +203,7 @@
     textarea.select();
     document.execCommand("copy");
     textarea.remove();
-    toastStore.success("Summary copied to clipboard");
+    toastStore.success($_("tasks.summaryCopied"));
   }
 
   // Drag and drop handlers
@@ -234,8 +235,8 @@
 <main class="min-h-screen px-6 pt-6 pb-10">
   <!-- Header with Title & Description -->
   <header class="mb-6">
-    <h1 class="text-3xl font-bold text-foreground">All Tasks</h1>
-    <p class="text-muted-foreground mt-1">View and manage all tasks with drag-and-drop</p>
+    <h1 class="text-3xl font-bold text-foreground">{$_("tasks.title")}</h1>
+    <p class="text-muted-foreground mt-1">{$_("tasks.description")}</p>
   </header>
 
   <div class="space-y-6">
@@ -243,8 +244,8 @@
     <div class="rounded-2xl border border-border bg-card p-6 shadow-sm">
       <div class="flex flex-wrap items-center justify-between gap-4 mb-5">
         <div>
-          <h2 class="text-lg font-semibold text-foreground">Filters & Stats</h2>
-          <p class="text-sm text-muted-foreground">Filter tasks and view statistics</p>
+          <h2 class="text-lg font-semibold text-foreground">{$_("tasks.filtersStats")}</h2>
+          <p class="text-sm text-muted-foreground">{$_("tasks.filtersDescription")}</p>
         </div>
         <div class="flex flex-wrap items-center gap-2">
           <button
@@ -252,7 +253,7 @@
             class="btn btn-secondary"
             onclick={clearFilters}
           >
-            Clear filters
+            {$_("tasks.clearFilters")}
           </button>
           <button
             type="button"
@@ -260,7 +261,7 @@
             onclick={copyTagsSummary}
           >
             <Clipboard size={14} />
-            Copy summary
+            {$_("tasks.copySummary")}
           </button>
           <button
             type="button"
@@ -268,7 +269,7 @@
             onclick={openTaskModal}
           >
             <Plus size={16} />
-            New task
+            {$_("tasks.newTask")}
           </button>
         </div>
       </div>
@@ -276,17 +277,17 @@
       <!-- Filters -->
       <div class="grid gap-3 md:grid-cols-4 mb-6">
         <label class="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-          Status
+          {$_("tasks.filterStatus")}
           <div class="mt-2">
             <Select
               bind:value={filterStatus}
               options={statusFilterOptions}
-              placeholder="Select status"
+              placeholder={$_("tasks.selectStatus")}
             />
           </div>
         </label>
         <label class="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-          Tag
+          {$_("tasks.filterTag")}
           <input
             class="mt-2 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
             placeholder="design"
@@ -294,20 +295,20 @@
           />
         </label>
         <label class="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-          From
+          {$_("tasks.filterFrom")}
           <div class="mt-2">
             <DatePicker
               bind:value={filterFrom}
-              placeholder="Start date"
+              placeholder={$_("tasks.startDate")}
             />
           </div>
         </label>
         <label class="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-          To
+          {$_("tasks.filterTo")}
           <div class="mt-2">
             <DatePicker
               bind:value={filterTo}
-              placeholder="End date"
+              placeholder={$_("tasks.endDate")}
             />
           </div>
         </label>
@@ -317,7 +318,7 @@
       <div class="grid gap-4 sm:grid-cols-3">
         <div class="rounded-xl border border-border bg-background px-4 py-3">
           <p class="text-xs uppercase tracking-wide text-muted-foreground">
-            Total tasks
+            {$_("tasks.totalTasks")}
           </p>
           <p class="mt-2 text-2xl font-bold text-foreground">
             {allTasks.length}
@@ -325,7 +326,7 @@
         </div>
         <div class="rounded-xl border border-border bg-background px-4 py-3">
           <p class="text-xs uppercase tracking-wide text-muted-foreground">
-            Filtered tasks
+            {$_("tasks.filteredTasks")}
           </p>
           <p class="mt-2 text-2xl font-bold text-foreground">
             {filteredTasks.length}
@@ -333,7 +334,7 @@
         </div>
         <div class="rounded-xl border border-border bg-background px-4 py-3">
           <p class="text-xs uppercase tracking-wide text-muted-foreground">
-            Total users
+            {$_("tasks.totalUsers")}
           </p>
           <p class="mt-2 text-2xl font-bold text-foreground">
             {users.length}
@@ -345,7 +346,7 @@
     <!-- No results warning -->
     {#if allTasks.length > 0 && filteredTasks.length === 0}
       <div class="rounded-2xl border border-primary/30 bg-primary/10 px-5 py-4 text-sm text-primary">
-        No tasks match your filters. Try clearing the filters or adjusting the date range.
+        {$_("tasks.noMatchFilters")}
       </div>
     {/if}
 
@@ -370,7 +371,7 @@
                 </div>
                 <div class="flex items-center gap-3">
                   <p class="text-[11px] text-muted-foreground">
-                    Updated {statusItem.updated.slice(0, 10)}
+                    {$_("tasks.updated")} {statusItem.updated.slice(0, 10)}
                   </p>
                   <span class="rounded-full bg-background px-2 py-1 text-xs font-semibold text-muted-foreground">
                     {getTasksForStatus(statusItem.status).length}
@@ -418,7 +419,7 @@
                     <div class="flex flex-wrap items-center gap-2 mb-3">
                       <span class={`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide ${priorityColor.bg} ${priorityColor.border} ${priorityColor.text}`}>
                         <AlertCircle size={10} />
-                        {task.priority || "medium"}
+                        {$_(`tasks.priority.${task.priority || "medium"}`)}
                       </span>
 
                       {#if task.points}
@@ -438,7 +439,7 @@
                       {#if task.blocked}
                         <span class="inline-flex items-center gap-1 rounded-full border border-rose-500/30 bg-rose-500/10 px-2 py-0.5 text-[10px] font-semibold text-rose-500">
                           <AlertTriangle size={10} />
-                          Blocked
+                          {$_("tasks.blocked")}
                         </span>
                       {/if}
                     </div>
@@ -480,7 +481,7 @@
                         <div class="flex items-center gap-2 mb-1">
                           <ListTodo size={10} class="text-muted-foreground" />
                           <span class="text-[10px] font-medium text-muted-foreground">
-                            {completedSubtasks}/{totalSubtasks} subtasks
+                            {completedSubtasks}/{totalSubtasks} {$_("tasks.subtasks")}
                           </span>
                         </div>
                         <div class="h-1 bg-muted rounded-full overflow-hidden">
@@ -524,7 +525,7 @@
                           </span>
                         {:else}
                           <span class="text-[10px] text-muted-foreground italic">
-                            Unassigned
+                            {$_("tasks.unassigned")}
                           </span>
                         {/if}
                       </div>
@@ -538,7 +539,7 @@
                             e.stopPropagation();
                             viewTaskDetail(task);
                           }}
-                          title="View Details"
+                          title={$_("tasks.viewDetails")}
                         >
                           <Eye size={12} />
                         </button>
@@ -549,7 +550,7 @@
                             e.stopPropagation();
                             editTask(task);
                           }}
-                          title="Edit"
+                          title={$_("common.edit")}
                         >
                           <Pencil size={12} />
                         </button>
@@ -560,7 +561,7 @@
                             e.stopPropagation();
                             removeTask(task);
                           }}
-                          title="Delete"
+                          title={$_("common.delete")}
                         >
                           <Trash2 size={12} />
                         </button>
@@ -571,7 +572,7 @@
                   <div class="flex flex-1 items-center justify-center rounded-xl border-2 border-dashed border-border bg-background/30 transition-all duration-300 hover:border-primary hover:bg-primary/5">
                     <span class="text-xs uppercase tracking-[0.3em] text-muted-foreground flex items-center gap-2">
                       <Move size={14} class="opacity-50" />
-                      Drop tasks here
+                      {$_("tasks.dropTasksHere")}
                     </span>
                   </div>
                 {/each}
@@ -601,10 +602,10 @@
 <!-- Confirm Delete Modal -->
 <ConfirmModal
   bind:open={confirmModalOpen}
-  title="Delete Task"
-  message={taskToDelete ? `Are you sure you want to delete "${taskToDelete.title}"? This action cannot be undone.` : "Are you sure you want to delete this task?"}
-  confirmText="Delete"
-  cancelText="Cancel"
+  title={$_("tasks.deleteTask")}
+  message={taskToDelete ? $_("tasks.deleteTaskMessage", { values: { title: taskToDelete.title } }) : $_("confirmModal.defaultMessage")}
+  confirmText={$_("common.delete")}
+  cancelText={$_("common.cancel")}
   variant="danger"
   onConfirm={confirmDelete}
 />

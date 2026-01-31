@@ -23,6 +23,7 @@
   import { dndzone } from "svelte-dnd-action";
   import { flip } from "svelte/animate";
   import { marked } from "marked";
+  import { _ } from "$lib/i18n";
 
   let activeSprint = $derived(
     sprintStore.sprints.find((s) => s.status === "active"),
@@ -178,9 +179,9 @@
 <main class="w-full px-6 pt-6 pb-10">
   <!-- Header with Title & Description -->
   <header class="mb-6">
-    <h1 class="text-3xl font-bold text-foreground">Sprint Board</h1>
+    <h1 class="text-3xl font-bold text-foreground">{$_("sprint.title")}</h1>
     <p class="text-muted-foreground mt-1">
-      Focus on the active sprint and move work to done
+      {$_("sprint.description")}
     </p>
   </header>
 
@@ -189,9 +190,9 @@
     <div class="rounded-2xl border border-border bg-card p-6 shadow-sm">
       <div class="flex flex-wrap items-start justify-between gap-4 mb-5">
         <div>
-          <h2 class="text-lg font-semibold text-foreground">Active Sprint</h2>
+          <h2 class="text-lg font-semibold text-foreground">{$_("sprint.activeSprint")}</h2>
           <p class="text-sm text-muted-foreground">
-            Current sprint status and progress
+            {$_("sprint.currentStatus")}
           </p>
         </div>
         <button
@@ -200,7 +201,7 @@
           onclick={openSprintModal}
         >
           <Plus size={16} />
-          New Sprint
+          {$_("sprint.newSprint")}
         </button>
       </div>
 
@@ -213,7 +214,7 @@
                 <p
                   class="text-xs uppercase tracking-[0.3em] text-muted-foreground"
                 >
-                  Active Sprint
+                  {$_("sprint.activeSprint")}
                 </p>
                 <h3 class="mt-2 text-2xl font-bold text-foreground">
                   {activeSprint.name}
@@ -235,7 +236,7 @@
                   <p
                     class="text-[11px] uppercase tracking-wide text-muted-foreground"
                   >
-                    Items
+                    {$_("sprint.items")}
                   </p>
                   <p class="mt-1 text-xl font-bold text-foreground">
                     {getSprintTasks().length}
@@ -247,7 +248,7 @@
                   <p
                     class="text-[11px] uppercase tracking-wide text-muted-foreground"
                   >
-                    Points
+                    {$_("sprint.points")}
                   </p>
                   <p class="mt-1 text-xl font-bold text-foreground">
                     {getTotalPoints(getSprintTasks())}
@@ -276,7 +277,7 @@
                 class="inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold transition-all bg-primary text-primary-foreground hover:bg-primary/90 shadow-sm"
                 onclick={() => completeSprint(activeSprint.id)}
               >
-                Close Sprint
+                {$_("sprint.closeSprint")}
               </button>
             </div>
           </div>
@@ -285,9 +286,9 @@
         <div class="rounded-xl border border-border bg-background">
           <EmptyState
             icon="calendar"
-            title="No Active Sprint"
-            description="Create a new sprint, add tasks to it, and activate it to start your iteration."
-            actionText="Create Sprint"
+            title={$_("sprint.noActiveSprint")}
+            description={$_("sprint.noActiveSprintDesc")}
+            actionText={$_("sprint.createSprint")}
             onAction={openSprintModal}
           />
         </div>
@@ -297,7 +298,7 @@
     <!-- All Sprints List -->
     <div class="rounded-2xl border border-border bg-card p-6 shadow-sm">
       <div class="flex items-center justify-between gap-4 mb-4">
-        <h3 class="text-base font-semibold text-foreground">All Sprints</h3>
+        <h3 class="text-base font-semibold text-foreground">{$_("sprint.allSprints")}</h3>
       </div>
       <div class="grid gap-4 md:grid-cols-2">
         {#each allSprints as sprint}
@@ -355,7 +356,7 @@
                     class="btn btn-primary px-3 py-1.5 text-xs flex-none"
                     onclick={() => activateSprint(sprint.id)}
                   >
-                    Start
+                    {$_("sprint.start")}
                   </button>
                 {/if}
                 {#if sprint.status === "active"}
@@ -364,7 +365,7 @@
                     class="inline-flex items-center justify-center gap-1 rounded-lg px-3 py-1.5 text-xs font-semibold transition-all bg-primary text-primary-foreground hover:bg-primary/90 shadow-sm flex-none"
                     onclick={() => completeSprint(sprint.id)}
                   >
-                    Close
+                    {$_("sprint.close")}
                   </button>
                 {/if}
                 <button
@@ -373,7 +374,7 @@
                   onclick={() => editSprint(sprint)}
                 >
                   <Pencil size={12} />
-                  Edit
+                  {$_("common.edit")}
                 </button>
                 <button
                   type="button"
@@ -381,7 +382,7 @@
                   onclick={() => removeSprint(sprint)}
                 >
                   <Trash2 size={12} />
-                  Remove
+                  {$_("sprint.remove")}
                 </button>
               </div>
             </div>
@@ -390,8 +391,7 @@
           <div
             class="rounded-xl border border-dashed border-border p-6 text-center text-sm text-muted-foreground col-span-2"
           >
-            No sprints created yet. Start a new sprint cycle to manage your
-            team's workload.
+            {$_("sprint.noSprintsYet")}
           </div>
         {/each}
       </div>
@@ -443,7 +443,7 @@
                       </h3>
                     </div>
                     <p class="text-[11px] text-muted-foreground mt-1">
-                      Updated {statusItem.updated.slice(0, 10)}
+                      {$_("sprint.updated")} {statusItem.updated.slice(0, 10)}
                     </p>
                   </div>
                   <span
@@ -525,7 +525,7 @@
                               onclick={() => editTask(task)}
                             >
                               <Pencil size={12} />
-                              Edit
+                              {$_("common.edit")}
                             </button>
                             <button
                               type="button"
@@ -533,7 +533,7 @@
                               onclick={() => removeTask(task)}
                             >
                               <Trash2 size={12} />
-                              Delete
+                              {$_("common.delete")}
                             </button>
                           </div>
                         </div>
@@ -548,7 +548,7 @@
                           <span
                             class="flex-none rounded-full bg-primary/10 border border-primary/20 px-2 py-1 text-[10px] uppercase tracking-wide text-primary"
                           >
-                            {task.points || "0"} pts
+                            {task.points || "0"} {$_("sprint.pts")}
                           </span>
                           <span
                             class="flex-none rounded-full bg-card border border-border px-2 py-1 text-[10px] uppercase tracking-wide text-muted-foreground"
@@ -559,7 +559,7 @@
                             <span
                               class="flex-none rounded-full bg-rose-500/10 border border-rose-500/20 px-2 py-1 text-[10px] uppercase tracking-wide text-rose-500"
                             >
-                              Blocked
+                              {$_("sprint.blocked")}
                             </span>
                           {/if}
                           <div class="flex-none ml-auto">
@@ -584,7 +584,7 @@
                         class="text-xs uppercase tracking-[0.3em] text-muted-foreground flex items-center gap-2"
                       >
                         <Move size={14} class="opacity-50" />
-                        Drop tasks here
+                        {$_("sprint.dropTasksHere")}
                       </span>
                     </div>
                   {/each}
@@ -624,14 +624,14 @@
 <!-- Confirm Delete Modal -->
 <ConfirmModal
   bind:open={confirmModalOpen}
-  title={confirmModalType === "sprint" ? "Delete Sprint" : "Delete Task"}
+  title={confirmModalType === "sprint" ? $_("sprint.deleteSprint") : $_("tasks.deleteTask")}
   message={confirmModalType === "sprint" && sprintToDelete
-    ? `Are you sure you want to delete "${sprintToDelete.name}"? This action cannot be undone.`
+    ? $_("sprint.deleteSprintMessage", { values: { name: sprintToDelete.name } })
     : confirmModalType === "task" && taskToDelete
-      ? `Are you sure you want to delete "${taskToDelete.title}"? This action cannot be undone.`
-      : "Are you sure you want to delete this item?"}
-  confirmText="Delete"
-  cancelText="Cancel"
+      ? $_("sprint.deleteTaskMessage", { values: { title: taskToDelete.title } })
+      : $_("confirmModal.defaultMessage")}
+  confirmText={$_("common.delete")}
+  cancelText={$_("common.cancel")}
   variant="danger"
   onConfirm={confirmDelete}
 />

@@ -18,6 +18,7 @@
   import TagModal from "../../lib/components/TagModal.svelte";
   import ConfirmModal from "../../lib/components/ConfirmModal.svelte";
   import StandardSwitch from "../../lib/StandardSwitch.svelte";
+  import { _ } from "$lib/i18n";
 
   let statuses = $derived(statusStore.statuses);
   let tags = $derived(tagStore.tags);
@@ -106,18 +107,18 @@
   function getConfirmModalConfig() {
     if (confirmModalType === "delete-status" && itemToDelete) {
       return {
-        title: "Delete Status",
-        message: `Are you sure you want to delete the "${itemToDelete.status}" status? Tasks with this status will need to be updated manually.`,
+        title: $_("settings.statuses.deleteTitle"),
+        message: $_("settings.statuses.deleteMessage", { values: { name: itemToDelete.status } }),
       };
     } else if (confirmModalType === "delete-tag" && itemToDelete) {
       return {
-        title: "Delete Tag",
-        message: `Are you sure you want to delete the "${itemToDelete.name}" tag? This will not affect existing tasks.`,
+        title: $_("settings.tags.deleteTitle"),
+        message: $_("settings.tags.deleteMessage", { values: { name: itemToDelete.name } }),
       };
     }
     return {
-      title: "Confirm Delete",
-      message: "Are you sure you want to delete this item?",
+      title: $_("confirmModal.defaultTitle"),
+      message: $_("confirmModal.defaultMessage"),
     };
   }
 
@@ -145,9 +146,9 @@
         <Settings size={24} class="text-primary" />
       </div>
       <div>
-        <h1 class="text-3xl font-bold text-foreground">Settings</h1>
+        <h1 class="text-3xl font-bold text-foreground">{$_("settings.title")}</h1>
         <p class="text-muted-foreground mt-1">
-          Configure your workflow and app preferences
+          {$_("settings.description")}
         </p>
       </div>
     </div>
@@ -166,7 +167,7 @@
         onclick={() => (activeTab = "statuses")}
       >
         <LayoutGrid size={16} />
-        Status Columns
+        {$_("settings.tabs.statuses")}
         <span
           class="ml-1 rounded-full bg-muted px-2 py-0.5 text-xs font-medium"
         >
@@ -183,7 +184,7 @@
         onclick={() => (activeTab = "tags")}
       >
         <Tag size={16} />
-        Tags
+        {$_("settings.tabs.tags")}
         <span
           class="ml-1 rounded-full bg-muted px-2 py-0.5 text-xs font-medium"
         >
@@ -199,14 +200,14 @@
       <!-- Header with action button -->
       <div class="flex items-center justify-between">
         <div>
-          <h2 class="text-xl font-bold text-foreground">Status Columns</h2>
+          <h2 class="text-xl font-bold text-foreground">{$_("settings.statuses.title")}</h2>
           <p class="text-sm text-muted-foreground mt-1">
-            Manage your workflow stages and their visibility
+            {$_("settings.statuses.description")}
           </p>
         </div>
         <button type="button" class="btn btn-primary" onclick={openStatusModal}>
           <Plus size={16} />
-          New Status
+          {$_("settings.statuses.newStatus")}
         </button>
       </div>
 
@@ -221,10 +222,10 @@
               class="mx-auto mb-4 text-muted-foreground opacity-50"
             />
             <h3 class="text-lg font-semibold text-foreground mb-2">
-              No Status Columns
+              {$_("settings.statuses.noStatuses")}
             </h3>
             <p class="text-sm text-muted-foreground mb-4">
-              Create status columns to organize your workflow
+              {$_("settings.statuses.createFirstDesc")}
             </p>
             <button
               type="button"
@@ -232,7 +233,7 @@
               onclick={openStatusModal}
             >
               <Plus size={16} />
-              Create First Status
+              {$_("settings.statuses.createFirst")}
             </button>
           </div>
         {:else}
@@ -261,7 +262,7 @@
                       {status.status}
                     </h3>
                     <p class="text-xs text-muted-foreground mt-0.5">
-                      Created {new Date(status.created).toLocaleDateString()}
+                      {$_("settings.statuses.created")} {new Date(status.created).toLocaleDateString()}
                     </p>
                   </div>
                 </div>
@@ -273,12 +274,12 @@
                     {#if status.show}
                       <Eye size={14} class="text-primary" />
                       <span class="text-xs font-medium text-foreground"
-                        >Visible</span
+                        >{$_("settings.statuses.visible")}</span
                       >
                     {:else}
                       <EyeOff size={14} class="text-muted-foreground" />
                       <span class="text-xs font-medium text-muted-foreground"
-                        >Hidden</span
+                        >{$_("settings.statuses.hidden")}</span
                       >
                     {/if}
                     <StandardSwitch
@@ -316,10 +317,7 @@
       <!-- Info Box -->
       <div class="rounded-xl border border-primary/30 bg-primary/5 p-4">
         <p class="text-sm text-foreground">
-          <span class="font-semibold">💡 Tip:</span> Drag and drop status columns
-          to reorder them. The order you set here will be reflected in task boards
-          and sprint views. Hidden columns won't appear in the board view but existing
-          tasks keep their status.
+          <span class="font-semibold">💡 Tip:</span> {$_("settings.statuses.tip")}
         </p>
       </div>
     </div>
@@ -331,14 +329,14 @@
       <!-- Header with action button -->
       <div class="flex items-center justify-between">
         <div>
-          <h2 class="text-xl font-bold text-foreground">Tags</h2>
+          <h2 class="text-xl font-bold text-foreground">{$_("settings.tags.title")}</h2>
           <p class="text-sm text-muted-foreground mt-1">
-            Create and manage tags for organizing tasks
+            {$_("settings.tags.description")}
           </p>
         </div>
         <button type="button" class="btn btn-primary" onclick={openTagModal}>
           <Plus size={16} />
-          New Tag
+          {$_("settings.tags.newTag")}
         </button>
       </div>
 
@@ -351,13 +349,13 @@
             size={48}
             class="mx-auto mb-4 text-muted-foreground opacity-50"
           />
-          <h3 class="text-lg font-semibold text-foreground mb-2">No Tags</h3>
+          <h3 class="text-lg font-semibold text-foreground mb-2">{$_("settings.tags.noTags")}</h3>
           <p class="text-sm text-muted-foreground mb-4">
-            Create tags to categorize and filter your tasks
+            {$_("settings.tags.createFirstDesc")}
           </p>
           <button type="button" class="btn btn-primary" onclick={openTagModal}>
             <Plus size={16} />
-            Create First Tag
+            {$_("settings.tags.createFirst")}
           </button>
         </div>
       {:else}
@@ -376,7 +374,7 @@
                     {tag.name}
                   </div>
                   <p class="text-xs text-muted-foreground">
-                    Created {new Date(tag.created).toLocaleDateString()}
+                    {$_("settings.tags.created")} {new Date(tag.created).toLocaleDateString()}
                   </p>
                 </div>
 
@@ -416,9 +414,7 @@
       <!-- Info Box -->
       <div class="rounded-xl border border-primary/30 bg-primary/5 p-4">
         <p class="text-sm text-foreground">
-          <span class="font-semibold">💡 Tip:</span> Tags help you categorize tasks
-          across different sprints and status columns. You can add multiple tags
-          to any task for better organization.
+          <span class="font-semibold">💡 Tip:</span> {$_("settings.tags.tip")}
         </p>
       </div>
     </div>
@@ -440,8 +436,8 @@
   bind:open={confirmModalOpen}
   title={modalConfig.title}
   message={modalConfig.message}
-  confirmText="Delete"
-  cancelText="Cancel"
+  confirmText={$_("common.delete")}
+  cancelText={$_("common.cancel")}
   variant="danger"
   onConfirm={handleConfirmDelete}
 />

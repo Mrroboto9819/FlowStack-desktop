@@ -1,0 +1,351 @@
+{
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "create": "Create",
+    "confirm": "Confirm",
+    "close": "Close",
+    "loading": "Loading...",
+    "search": "Search",
+    "filter": "Filter",
+    "all": "All",
+    "none": "None",
+    "yes": "Yes",
+    "no": "No"
+  },
+  "nav": {
+    "sprint": "Sprint",
+    "tasks": "Tasks",
+    "backlog": "Backlog",
+    "sprints": "Sprints",
+    "team": "Team",
+    "boardSettings": "Board Settings"
+  },
+  "sidebar": {
+    "expandSidebar": "Expand sidebar",
+    "collapseSidebar": "Collapse sidebar",
+    "signUp": "Sign Up",
+    "preferences": "Preferences",
+    "freeAccount": "Free Account",
+    "comingSoon": {
+      "title": "Coming Soon!",
+      "message": "We're currently working on this feature. Stay tuned for updates!",
+      "button": "Got it"
+    }
+  },
+  "titlebar": {
+    "toggleTheme": "Toggle theme",
+    "changeLanguage": "Change language"
+  },
+  "update": {
+    "available": "v{version} available",
+    "title": "Update Available",
+    "message": "A new version (v{version}) is available. Would you like to download and install it now?",
+    "updateNow": "Update Now",
+    "later": "Later"
+  },
+  "settings": {
+    "title": "Settings",
+    "description": "Configure your workflow and app preferences",
+    "tabs": {
+      "statuses": "Status Columns",
+      "tags": "Tags"
+    },
+    "statuses": {
+      "title": "Status Columns",
+      "description": "Manage your workflow stages and their visibility",
+      "newStatus": "New Status",
+      "noStatuses": "No Status Columns",
+      "createFirst": "Create First Status",
+      "createFirstDesc": "Create status columns to organize your workflow",
+      "visible": "Visible",
+      "hidden": "Hidden",
+      "created": "Created",
+      "deleteTitle": "Delete Status",
+      "deleteMessage": "Are you sure you want to delete the \"{name}\" status? Tasks with this status will need to be updated manually.",
+      "tip": "Drag and drop status columns to reorder them. The order you set here will be reflected in task boards and sprint views. Hidden columns won't appear in the board view but existing tasks keep their status."
+    },
+    "tags": {
+      "title": "Tags",
+      "description": "Create and manage tags for organizing tasks",
+      "newTag": "New Tag",
+      "noTags": "No Tags",
+      "createFirst": "Create First Tag",
+      "createFirstDesc": "Create tags to categorize and filter your tasks",
+      "created": "Created",
+      "deleteTitle": "Delete Tag",
+      "deleteMessage": "Are you sure you want to delete the \"{name}\" tag? This will not affect existing tasks.",
+      "tip": "Tags help you categorize tasks across different sprints and status columns. You can add multiple tags to any task for better organization."
+    }
+  },
+  "preferences": {
+    "title": "Preferences",
+    "description": "Customize your TaskFlow experience",
+    "userProfile": {
+      "title": "User Profile",
+      "displayName": "Display Name",
+      "placeholder": "Enter your name"
+    },
+    "appearance": {
+      "title": "Appearance",
+      "darkMode": "Dark Mode",
+      "darkModeDescription": "Toggle dark/light theme",
+      "themeColor": "Theme Color"
+    },
+    "dataManagement": {
+      "title": "Data Management",
+      "clearData": "Clear All Data",
+      "clearDataDescription": "This will delete all tasks, sprints, team members, and settings from your browser. Your preferences (theme, name) will be preserved. This action cannot be undone.",
+      "confirmClear": "Are you sure you want to delete all your tasks, sprints, team members, and board settings? This action cannot be undone. Your preferences (theme, name) will be preserved."
+    },
+    "about": {
+      "title": "About",
+      "version": "Version",
+      "storageUsed": "Storage Used"
+    },
+    "language": {
+      "title": "Language",
+      "description": "Select your preferred language"
+    }
+  },
+  "tasks": {
+    "title": "All Tasks",
+    "description": "View and manage all tasks with drag-and-drop",
+    "newTask": "New task",
+    "noTasks": "No tasks found",
+    "createFirst": "Create your first task",
+    "filtersStats": "Filters & Stats",
+    "filtersDescription": "Filter tasks and view statistics",
+    "clearFilters": "Clear filters",
+    "copySummary": "Copy summary",
+    "filterStatus": "Status",
+    "filterTag": "Tag",
+    "filterFrom": "From",
+    "filterTo": "To",
+    "selectStatus": "Select status",
+    "startDate": "Start date",
+    "endDate": "End date",
+    "totalTasks": "Total tasks",
+    "filteredTasks": "Filtered tasks",
+    "totalUsers": "Total users",
+    "noMatchFilters": "No tasks match your filters. Try clearing the filters or adjusting the date range.",
+    "updated": "Updated",
+    "blocked": "Blocked",
+    "subtasks": "subtasks",
+    "dropTasksHere": "Drop tasks here",
+    "viewDetails": "View Details",
+    "deleteTask": "Delete Task",
+    "deleteTaskMessage": "Are you sure you want to delete \"{title}\"? This action cannot be undone.",
+    "filtersCleared": "Filters cleared",
+    "summaryCopied": "Summary copied to clipboard",
+    "noTasksInStatus": "(no tasks)",
+    "modal": {
+      "createTitle": "New Task",
+      "editTitle": "Edit Task",
+      "fields": {
+        "title": "Title",
+        "titlePlaceholder": "Ship drag and drop MVP",
+        "description": "Description (Markdown)",
+        "descriptionPlaceholder": "What needs to be done. Markdown is supported.",
+        "type": "Type",
+        "points": "Points",
+        "priority": "Priority",
+        "epic": "Epic",
+        "tags": "Tags",
+        "assign": "Assign",
+        "status": "Status",
+        "sprint": "Sprint",
+        "time": "Time",
+        "acceptance": "Acceptance criteria",
+        "acceptancePlaceholder": "Given..., when..., then...",
+        "subtasks": "Subtasks",
+        "blocked": "Status: Blocked",
+        "blockerReason": "Blocker reason",
+        "blockerPlaceholder": "Waiting on API access"
+      },
+      "preview": {
+        "write": "Write",
+        "split": "Split",
+        "preview": "Preview",
+        "noDescription": "No description to preview."
+      },
+      "actions": {
+        "create": "Create Task",
+        "save": "Save Changes"
+      }
+    },
+    "types": {
+      "story": "Story",
+      "bug": "Bug",
+      "chore": "Chore"
+    },
+    "priority": {
+      "low": "Low",
+      "medium": "Medium",
+      "high": "High",
+      "critical": "Critical"
+    },
+    "unassigned": "Unassigned",
+    "backlog": "Backlog",
+    "addToSprint": "Add to sprint",
+    "removeFromSprint": "Remove from sprint"
+  },
+  "sprint": {
+    "title": "Sprint Board",
+    "description": "Focus on the active sprint and move work to done",
+    "activeSprint": "Active Sprint",
+    "currentStatus": "Current sprint status and progress",
+    "newSprint": "New Sprint",
+    "items": "Items",
+    "points": "Points",
+    "closeSprint": "Close Sprint",
+    "noActiveSprint": "No Active Sprint",
+    "noActiveSprintDesc": "Create a new sprint, add tasks to it, and activate it to start your iteration.",
+    "createSprint": "Create Sprint",
+    "allSprints": "All Sprints",
+    "start": "Start",
+    "close": "Close",
+    "remove": "Remove",
+    "noSprintsYet": "No sprints created yet. Start a new sprint cycle to manage your team's workload.",
+    "updated": "Updated",
+    "pts": "pts",
+    "dropTasksHere": "Drop tasks here",
+    "deleteSprint": "Delete Sprint",
+    "deleteSprintMessage": "Are you sure you want to delete \"{name}\"? This action cannot be undone.",
+    "deleteTaskMessage": "Are you sure you want to delete \"{title}\"? This action cannot be undone."
+  },
+  "backlog": {
+    "title": "Product Backlog",
+    "description": "Prioritize and prepare items for the next sprint",
+    "overview": "Backlog Overview",
+    "trackMetrics": "Track your backlog metrics",
+    "newItem": "New backlog item",
+    "items": "Backlog items",
+    "itemsList": "Backlog Items",
+    "activeSprint": "Active sprint",
+    "pointsInBacklog": "Points in backlog",
+    "addToSprint": "Add to sprint",
+    "view": "View",
+    "empty": "Backlog is empty",
+    "emptyMessage": "Add items to plan your next sprint.",
+    "createFirst": "Create first item",
+    "noActiveSprint": "No active sprint available",
+    "taskAddedToSprint": "Task added to sprint",
+    "pts": "pts"
+  },
+  "sprints": {
+    "title": "Sprint Management",
+    "description": "Plan, activate, and track your sprints",
+    "newSprint": "New Sprint",
+    "noSprints": "No sprints yet",
+    "createFirst": "Create First Sprint",
+    "createFirstDesc": "Create your first sprint to start organizing your tasks into time-boxed iterations.",
+    "activeSprint": "Active Sprint",
+    "plannedSprints": "Planned Sprints",
+    "completedSprints": "Completed Sprints",
+    "sprintGoal": "Sprint Goal",
+    "tasks": "Tasks",
+    "points": "Points",
+    "startDate": "Start Date",
+    "daysLeft": "Days Left",
+    "progress": "Progress",
+    "activate": "Activate",
+    "complete": "Complete",
+    "starts": "Starts",
+    "completed": "Completed",
+    "ended": "Ended",
+    "completeSprint": "Complete Sprint",
+    "completeSprintMessage": "Are you sure you want to complete \"{name}\"? This will close the sprint and mark it as completed.",
+    "deleteSprintMessage": "Are you sure you want to delete \"{name}\"? This will not delete the tasks, but they will be moved back to the backlog.",
+    "modal": {
+      "createTitle": "New Sprint",
+      "editTitle": "Edit Sprint",
+      "fields": {
+        "name": "Name",
+        "namePlaceholder": "Sprint 1",
+        "startDate": "Start Date",
+        "endDate": "End Date",
+        "goal": "Goal",
+        "goalPlaceholder": "What do you want to achieve?"
+      },
+      "actions": {
+        "create": "Create Sprint",
+        "save": "Save Changes"
+      }
+    },
+    "status": {
+      "active": "Active",
+      "completed": "Completed",
+      "planned": "Planned"
+    }
+  },
+  "team": {
+    "title": "Team",
+    "description": "Manage your team members and their roles",
+    "addMember": "Add Member",
+    "newMember": "New Member",
+    "teamMembers": "Team Members",
+    "member": "member",
+    "members": "members",
+    "totalMembers": "Total Members",
+    "roles": "Roles",
+    "withTasks": "With Tasks",
+    "noTeamMembers": "No Team Members",
+    "noMembers": "No team members yet",
+    "addFirstMember": "Add First Member",
+    "addMemberDesc": "Add team members to assign tasks and collaborate effectively.",
+    "createFirst": "Add your first team member",
+    "totalTasks": "Total Tasks",
+    "active": "Active",
+    "removeMember": "Remove Team Member",
+    "removeMemberMessage": "Are you sure you want to remove {name} from the team? This will not delete their assigned tasks.",
+    "remove": "Remove",
+    "modal": {
+      "createTitle": "New Team Member",
+      "editTitle": "Edit Team Member",
+      "fields": {
+        "name": "Name",
+        "namePlaceholder": "John Doe",
+        "role": "Role",
+        "rolePlaceholder": "Developer",
+        "email": "Email",
+        "emailPlaceholder": "john@example.com"
+      },
+      "actions": {
+        "create": "Add Member",
+        "save": "Save Changes"
+      }
+    }
+  },
+  "confirmModal": {
+    "defaultTitle": "Confirm Action",
+    "defaultMessage": "Are you sure you want to proceed?"
+  },
+  "toast": {
+    "dataLoaded": "Data loaded",
+    "dataSaved": "Data saved",
+    "dataCleared": "All data cleared",
+    "themeSet": "Theme set to {theme}",
+    "taskCreated": "Task created",
+    "taskUpdated": "Task updated",
+    "taskDeleted": "Task deleted",
+    "sprintCreated": "Sprint created",
+    "sprintUpdated": "Sprint updated",
+    "sprintDeleted": "Sprint deleted",
+    "memberCreated": "Team member added",
+    "memberUpdated": "Team member updated",
+    "memberDeleted": "Team member removed",
+    "statusCreated": "Status created",
+    "statusUpdated": "Status updated",
+    "statusDeleted": "Status deleted",
+    "tagCreated": "Tag created",
+    "tagUpdated": "Tag updated",
+    "tagDeleted": "Tag deleted"
+  },
+  "emptyState": {
+    "title": "Nothing here yet",
+    "message": "Get started by creating your first item"
+  }
+}

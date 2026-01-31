@@ -1,10 +1,11 @@
 <script lang="ts">
   import "../app.css";
   import { onMount, type Snippet } from "svelte";
-  import { Minus, Square, X, Moon, Sun } from "lucide-svelte";
+  import { Minus, Square, X, Moon, Sun, Download } from "lucide-svelte";
   import ToastContainer from "../lib/ToastContainer.svelte";
   import Sidebar from "../lib/components/Sidebar.svelte";
   import UpdateScreen from "../lib/UpdateScreen.svelte";
+  import ConfirmModal from "../lib/components/ConfirmModal.svelte";
   import { hydrateAllStores, clearAllStores } from "../lib/stores/index.js";
 
   let { children } = $props();
@@ -20,6 +21,12 @@
   let updateStatus = $state<"checking" | "downloading" | "installing" | "restarting">("checking");
   let updateProgress = $state(0);
   let updateVersion = $state("");
+
+  // Update confirmation modal state
+  let updateModalOpen = $state(false);
+  let pendingUpdate: any = $state(null);
+  let relaunchFn: (() => Promise<void>) | null = $state(null);
+  let updateSkipped = $state(false); // Track if user skipped the update
 
   onMount(async () => {
     mounted = true;
@@ -75,49 +82,20 @@
 
   async function setupUpdater() {
     try {
-      const { checkUpdate } = await import("@tauri-apps/plugin-updater");
+      const { check } = await import("@tauri-apps/plugin-updater");
       const { relaunch } = await import("@tauri-apps/plugin-process");
 
       // Check for updates on app start
-      const update = await checkUpdate();
+      const update = await check();
 
       if (update?.available) {
-        updateVisible = true;
-        updateStatus = "downloading";
-        // Set the actual version from the update manifest
+        // Store the update and relaunch function for later use
+        pendingUpdate = update;
+        relaunchFn = relaunch;
         updateVersion = update.version || "";
 
-        // Track download progress
-        let downloaded = 0;
-        let contentLength = 0;
-
-        // Download and install the update
-        await update.downloadAndInstall((event) => {
-          switch (event.event) {
-            case "Started":
-              updateStatus = "downloading";
-              contentLength = event.data.contentLength || 0;
-              downloaded = 0;
-              updateProgress = 0;
-              break;
-            case "Progress":
-              downloaded += event.data.chunkLength;
-              if (contentLength > 0) {
-                updateProgress = Math.round((downloaded / contentLength) * 100);
-              }
-              break;
-            case "Finished":
-              updateStatus = "installing";
-              updateProgress = 100;
-              break;
-          }
-        });
-
-        updateStatus = "restarting";
-        // Wait a moment before restarting
-        setTimeout(() => {
-          relaunch();
-        }, 1000);
+        // Show confirmation modal to ask user
+        updateModalOpen = true;
       }
     } catch (error) {
       console.error("Update check failed:", error);
@@ -125,32 +103,112 @@
     }
   }
 
-  // Test function for development
-  function testUpdateScreen() {
-    updateVisible = true;
-    updateStatus = "checking";
-    updateProgress = 0;
-    updateVersion = "2.0.0";
+  async function handleUpdateConfirm() {
+    if (!pendingUpdate || !relaunchFn) return;
 
-    // Simulate update progress
-    setTimeout(() => {
-      updateStatus = "downloading";
-      let progress = 0;
-      const interval = setInterval(() => {
-        progress += 5;
-        updateProgress = progress;
-        if (progress >= 100) {
-          clearInterval(interval);
-          updateStatus = "installing";
-          setTimeout(() => {
-            updateStatus = "restarting";
-            setTimeout(() => {
-              updateVisible = false;
-            }, 2000);
-          }, 1500);
+    // Close modal and show download screen
+    updateModalOpen = false;
+    updateVisible = true;
+    updateStatus = "downloading";
+
+    try {
+      // Track download progress
+      let downloaded = 0;
+      let contentLength = 0;
+
+      // Download and install the update
+      await pendingUpdate.downloadAndInstall((event: any) => {
+        switch (event.event) {
+          case "Started":
+            updateStatus = "downloading";
+            contentLength = event.data.contentLength || 0;
+            downloaded = 0;
+            updateProgress = 0;
+            break;
+          case "Progress":
+            downloaded += event.data.chunkLength;
+            if (contentLength > 0) {
+              updateProgress = Math.round((downloaded / contentLength) * 100);
+            }
+            break;
+          case "Finished":
+            updateStatus = "installing";
+            updateProgress = 100;
+            break;
         }
-      }, 200);
-    }, 1000);
+      });
+
+      updateStatus = "restarting";
+      // Wait a moment before restarting
+      setTimeout(() => {
+        relaunchFn?.();
+      }, 1000);
+    } catch (error) {
+      console.error("Update installation failed:", error);
+      updateVisible = false;
+    }
+  }
+
+  function handleUpdateCancel() {
+    // User declined, mark as skipped but keep the update available
+    updateSkipped = true;
+  }
+
+  function handleDownloadCancel() {
+    // User canceled during download
+    updateVisible = false;
+    updateProgress = 0;
+    updateStatus = "checking";
+    updateSkipped = true; // Show the indicator so they can retry
+  }
+
+  function showUpdateModal() {
+    // Re-show the update modal (when user clicks the skipped update indicator)
+    if (pendingUpdate && relaunchFn) {
+      updateSkipped = false;
+      updateModalOpen = true;
+    }
+  }
+
+  // Test function for development - simulates the full update flow
+  function testUpdateScreen() {
+    updateVersion = "2.0.0";
+    updateSkipped = false;
+    // Show the confirmation modal first (like real flow)
+    updateModalOpen = true;
+
+    // Mock the pending update for testing
+    pendingUpdate = {
+      downloadAndInstall: async (callback: any) => {
+        callback({ event: "Started", data: { contentLength: 100 } });
+        let progress = 0;
+        await new Promise<void>((resolve, reject) => {
+          const interval = setInterval(() => {
+            // Check if download was cancelled
+            if (!updateVisible) {
+              clearInterval(interval);
+              reject(new Error("Cancelled"));
+              return;
+            }
+            progress += 10;
+            callback({ event: "Progress", data: { chunkLength: 10 } });
+            if (progress >= 100) {
+              clearInterval(interval);
+              callback({ event: "Finished", data: {} });
+              resolve();
+            }
+          }, 200);
+        });
+      }
+    };
+    relaunchFn = async () => {
+      // In test mode, just hide the screen after "restarting"
+      setTimeout(() => {
+        updateVisible = false;
+        pendingUpdate = null;
+        relaunchFn = null;
+      }, 2000);
+    };
   }
 
   function applyDarkMode() {
@@ -220,11 +278,22 @@
     {@render children()}
   </div>
 
-  <!-- Version Tag -->
-  <div
-    class="fixed bottom-2 right-4 pointer-events-none opacity-40 z-50 text-[10px] text-muted-foreground font-mono select-none"
-  >
-    v{__APP_VERSION__}
+  <!-- Version Tag & Update Indicator -->
+  <div class="fixed bottom-2 right-4 z-50 flex items-center gap-2">
+    {#if updateSkipped && pendingUpdate}
+      <button
+        type="button"
+        class="flex items-center gap-1.5 rounded-full bg-primary px-3 py-1 text-[10px] font-medium text-primary-foreground shadow-lg transition-all hover:bg-primary/90 hover:scale-105 animate-pulse"
+        onclick={showUpdateModal}
+        title="Update available - click to install"
+      >
+        <Download size={12} />
+        v{updateVersion} available
+      </button>
+    {/if}
+    <div class="pointer-events-none opacity-40 text-[10px] text-muted-foreground font-mono select-none">
+      v{__APP_VERSION__}
+    </div>
   </div>
 
   <!-- Toast Notifications -->
@@ -236,5 +305,18 @@
     status={updateStatus}
     progress={updateProgress}
     version={updateVersion}
+    onCancel={handleDownloadCancel}
+  />
+
+  <!-- Update Confirmation Modal -->
+  <ConfirmModal
+    bind:open={updateModalOpen}
+    title="Update Available"
+    message={`A new version (v${updateVersion}) is available. Would you like to download and install it now?`}
+    confirmText="Update Now"
+    cancelText="Later"
+    variant="info"
+    onConfirm={handleUpdateConfirm}
+    onCancel={handleUpdateCancel}
   />
 </div>

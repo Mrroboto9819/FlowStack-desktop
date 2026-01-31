@@ -1,12 +1,13 @@
 <script>
   import { fade } from "svelte/transition";
-  import { Download } from "lucide-svelte";
+  import { Download, X } from "lucide-svelte";
 
   let {
     visible = false,
     status = "checking",
     progress = 0,
     version = "",
+    onCancel = () => {},
   } = $props();
 
   const statusMessages = {
@@ -15,6 +16,9 @@
     installing: "Installing update...",
     restarting: "Update complete! Restarting...",
   };
+
+  // Can only cancel during downloading phase
+  const canCancel = $derived(status === "downloading");
 </script>
 
 {#if visible}
@@ -67,6 +71,18 @@
           ></div>
         {/each}
       </div>
+
+      <!-- Cancel Button (only during download) -->
+      {#if canCancel}
+        <button
+          type="button"
+          class="mt-4 flex items-center gap-2 rounded-lg border border-border bg-card px-4 py-2 text-sm font-medium text-muted-foreground transition-all hover:bg-muted hover:text-foreground"
+          onclick={onCancel}
+        >
+          <X size={16} />
+          Cancel Update
+        </button>
+      {/if}
     </div>
 
     <!-- Version Info Footer -->
